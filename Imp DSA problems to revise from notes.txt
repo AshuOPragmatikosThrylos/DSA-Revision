@@ -211,7 +211,28 @@ not two child like Binary Tree but has..... ArrayList<Node> children
 9) Are GTs mirror in shape(not datawise)? ........DIY
 10) Is GT symmetric /foldable?
     - In other words, they are asking ..... is the given GT mirror image of itself?
-11)
+11) Predecessor and Successor of given node in preorder traversal............Very Imp
+    - have to find out both pre and succ in 1 pass itself
+    - have to maintain a variable 'state'
+    - next call krne se pehle predecessor ko update karna h........Note: ek child se dusre child k taraf jate waqt predecessor ko nhi update karna h.........predecessor to be updated in "Node Pre" not in "Edge Pre"
+    - state 0 to state 1 --> matlab data mil chuka h aur isliye ab further traversal me predecessor update nhi karna....to further traversal karna hi kyu h? kyunki successor pta lgane k liye aage explore karna hi pdega...hum future nhi dekh sakte
+    - state 1 to state 2 --> aur ek baar successor mil jaye to 'successor' ko bhi update nhi karna h in further traversals ..........Note: this is in addition to "predecessor ko bhi nhi update karna h" 
+
+    - Caution: agar tree me data ho hi nhi to we might end up informing wrong predecessor....Edge Case.....han par successor me kuch galat nhi hoga....kyunki successor update hi nhi ho paya hoga
+12) Ceil --> smallest among larger
+      Floor --> largest among smaller
+13) Diameter of GT....Imp
+     - koi bhi node se 2 chiz return krwao...diameter across that node, height of that node
+     - height of that node is required to calculate diameter across its parent
+     - kyunki diameter of a tree represented by say root....can be across root or can be within any of its subtree
+     - Refer Level Up 3 ....Diameter Set
+
+     TODO for future:  attach xerox of Level Up 3 version in  Foundation 2 notes
+
+14) Kth largest......Very Imp.....DIY
+     - equals floor of (K-1) th largest
+     - 1st largest == floor of 0 th largest == Infinity
+15)
 
 
 Binary Trees

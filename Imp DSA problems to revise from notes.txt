@@ -232,7 +232,19 @@ not two child like Binary Tree but has..... ArrayList<Node> children
 14) Kth largest......Very Imp.....DIY
      - equals floor of (K-1) th largest
      - 1st largest == floor of 0 th largest == Infinity
-15)
+15) Node with maximum subtree sum ( there can be negative numbers as well stored in the tree)
+
+16) Iterative preorder and postorder traversal ( this trick can also be used for inorder) (this trick can also be used for BTs) 
+      - 'state' variable used
+      - stack has <- - elements which have not been explored completely yet
+      - state = -1 (i.e if we found state = -1 in tos) => call to 0th child has not been made => pre area ....increment state to 0 so that 0th child can be called in next iteration
+      - state = n ( n == number of children of the node in tos) ==> all the children have been explored => post area => time to pop
+      - state = x in between [1, n-1] ==> call xth child in next iteration.....increment state to (x+1) so that (x+1) th child can be called in next iteration
+
+17) Iterable and Iterator interfaces
+     - both are interfaces
+     - class which implements Iterable has to implement Iterator<Integer> iterator() function... the implementation should contain an object of a class which has implemented Iterator interface
+     - class which implements Iterator has to implement hasNext() and next()
 
 
 Binary Trees

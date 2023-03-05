@@ -1,0 +1,229 @@
+Foundation 1
+----------------
+
+Arrays
+--------
+
+1) Bar Chart....best pattern question
+2) Subsets of Array
+3) Ceil and Floor......Application of binary search
+4) First Index, Last Index......Application of binary search
+
+
+2D Arrays
+------------
+
+1) Spiral Traversal....box k andar box se solve kro, innermost box might not have all walls
+2) Rotate Matrix by 90 degree clockwise.......... Transpose me [i][j] ko [j][i] se swap karna hota h but this cannot be done for all i,j combinations.....only for half of total combinations...in which j>=i
+3) Search in a sorted 2D array
+
+
+Strings, String Builders, ArrayLists
+------------------------------------------
+
+1) Print all substrings
+2) Print all palindromic substrings..........Brute force
+3) String compression
+4) Print all permutations of a string - iterative (Not at all intuitive).....divide by n then (n-1)....all the way to 1...divide kya? kaunsawa permutation and the subsequent quotients....jo jo remainder aate jata h remaining string me se usko nikalkar print krte rho
+5) Remove primes from arraylist..........Conclusion: always remove elements from end of arraylist....taki shifting (due to deletion from mid arraylist) k wajah se garbar na ho jaye
+
+
+Recursion
+------------
+
+1) Tower of Hanoi
+2) First Index, Last Index in array (Iterative wale me binary search use kar skte...see above in this text file under Arrays section)
+3) All indices of array..........DIY without seeing solution
+4) Get Subsequence
+5) Get KeyPad Combination.......DIY if revised 4
+6) Get Stair Paiths....ek ek karke hi sirf to decrement nhi kar rhe  ==> n can become < 0 too in just 1 step
+7) Get Maze Path with Jumps..........DIY without seeing solution
+8) Print Subsequence............ on way up...ans bnate chalo.....compare with "Get Subsequence" which is "on way down" soln
+9) Print stair paths.....path + 1 krne se kya hoga aur 1+ path krne se kya hoga ye socho
+10) Print Maze paths....notice the two ways...call smart, base case normal ......call stupid, base case smart.....bas ye call krne ka tareeka revise krwana tha notes me se....waise to question me dam nhi
+11) Print permutations...sare characters ko starting character banne ka mauka dena hoga.......compare with "Print all permutations of a string - iterative" under Strings section
+12) Print Encodings......DIY.........2 options - 1char, 2 char ko parse karna h sari possibilities bnane k liye .....2 char hona bhi chahiye pehle....aur wo bhi 2char >26 nhi hona chahiye
+13) FloodFill...backtracking ka matlab apne footprints mita dena....par aisa krna hi kyu h? .....ya to previously exploration me ans nhi mila ya phir mil gya and aur bhi mil sakta h cuz multiple ans are possible.....understand visited array ka significance ...needed when we go in dir and 180 degree opposite dir as well..to prevent infinite loop visited array lena padta h.....understand why Red Euro symbol k jagah par return likhna kyu required h
+
+By now I am wondering kab kab "on way up" use karna h aur kab "on way down"....kahin to notes me likha tha ye shayd...maybe level up k recursion ya DP me mil jaye.....TODO: mile to yahan likh dena reason
+
+for now --> man me socho jisme recursiveAns se myAns bnana hard lge...usme "on way down" nhi use krna
+
+14) Target Sum Subsets.....pehle subsets bna lo phir target se subsetSum compare kro.........baad me jab poora subset bn gya h tab jakar loop lgakar sum calculate krne se accha h ki jaise jaise "on way up" jate ho waise waise subsetSum calculate krte rho
+15) N Queens.....Very Very Imp.....how solution thought from scratch all the way to its code
+16) Knights Tour
+
+
+Stacks and Queues
+-----------------------
+
+1) Read from OOPS | Swap Game 3 onwards to just before start of Arrays and Queues section
+2) Dynamic stack...using array.....create array of double size, change reference..........seems O(n) due to copying all elements of old array into new one...but push() even now is O(1)......dynamic me kabhi overflow msg print krne ki zaroort nhi pdti (same with dynamic queue as well.....front pointer humesha update krte hue chalna h)....tos pointer humesha update krte hue chalna h
+
+Queue<> ke aur Stack<> ke alag alag se functions yaad rkhne se accha h always use ArrsyList<> as stack or queue a/c to need
+
+Stack<> --> push(), pop()
+Queue<> --> add(), remove()
+
+3) Normal Queue
+4) Balanced Brackets....3 cases should be dealt #OB> #CB or #OB < #CB or inappropriate pair(jo bracket sabse baad me aaya h(open hua h) wo sabse pehle close honi chahiye)  
+5) Duplicate Brackets....meaning of duplicate brackets smjhna is tricky.........we don't talk about duplicate brackets if the given expression is not balanced (Balanced Brackets).......when CB is encountered pop till OB............. agar CB se just pehle OB hi mil jaye ( no characters in between) ==> duplicate brackets
+6) Celebrity Problem.....Very Imp....question padhkar bilkul nhi lagta ki ye stack problem ho sakta h...aur stack se kaise solve kar skte wo bhi itna zyada intuitive nhi..............Approach --> all possible celebrities ko stack me store rkho (initially sare k sare ko possible celebrity maankar stack me rakh do).... then 2 do krke pop kro aur ek possibly celebrity ko filter out kar do........ ye repeated filtering out tab tak krni h jab tak stack me bas 1 possible celebrity nhi reh jata....jo reh gya h wo bhi possible celebrity h confirm celebrity nhi ( there can be either 0 celebrity or only 1 celebrity...kind of like Saddle Point under 2D Arrays section)...to ab is possible celebrity par celebrity h ya nhi ka check phir lga do ......ye stack solution ka TC O(n) kaise h ye smjhna bhi zaroori h
+7) Postfix Evaluation and Conversion....Imp type
+8) Infix evaluation .....Very Imp.....Interview me ye 100 % shi ho jaye matlab tum alag hi level pe ho
+
+   - 2 stacks used 1) for operands 2) for operators and ')'
+   - 4 cases bnta h ....what to do when encounter ......1) ')'       2) '('    3) operators 4) operands
+
+        -- operands encountered while reading given infix expression L to R  --> push in operands stack ( ye operands later evaluation k liye use honge ....isliye have to take care of char to integer conversion)
+        -- '(' encountered --> push in operators stack
+        -- ')' encountered --> 1) pop and keep on evaluating until we get '('           2) pop '(' too
+        -- operators encountered --> jab tak operators stack empty nhi ho jata ya jab tak operators stack ke top pe '(' nhi dikh jata ya jab tab operators stack ke top par current char se lower precedence(matlab agar barabar precedence hua tab bhi evaluate krwana h) (of course precedence check krne k liye ek alag function likhna pdega ) ka character nhi aa jata.............tab tak purane operators ko evaluate krwate rho aur result ko operands stack me daalte rho (Note: even after processing whole infix expression, operator stack might not be empty (ex: 2+3*6) to phir se evaluate then push result in operand stack krna pdega and at last we'll find result in top of operand stack)....usi k baad current operator ko stack me daal sakte
+
+       Note: poore code me operators stack me se hi bas pop krte h kabhi kabhi....operands me se pop bas evaluate krte samay krte h varna nhi
+
+
+9) Queue to Stack adapter - push efficient.......Imp type
+    -- queue use krke stack bnana h
+    -- 2 queues use karna pdega...mainQ, helperQ
+10) Queue to Stack adapter - pop efficient .............DIY
+11) Stack to Queue - add efficient...........slightly different from previous adapter questions...references mainS aur helperS ka interchange nhi karna h 
+12) Next Greater Element to/on the Right ...NGOR
+
+        main: NGOR
+        derivatives: NGOL, NSOR, NSOL
+
+        stack contains --> ifwahnbfy --> indices for which ans has not been found yet
+
+        OL --> traverse R to L.....every cell initiallised with -1
+        OR --> traverse L to R......every cell initialised with n(=arr.length)
+
+        NG --> arr[st.peek()] < arr[i]
+        NS --> arr[st.peek()] > arr[i]
+
+13) Stock Span....it's basically i - NGOL[i]
+14) Largest Rectangle/Area in Histogram.....Refer Level Up notes instead
+        -- Approach 1 --> NSOR, NSOL used..........mutiple pass solution
+        -- Approach 2 --> 1 pass solution ......... NSOR jab hume milta h to uska hum kaise use krte they in previous solution?.....to ye socho aur NSOR ka code hi likho....NSOL will be whatever is below me in stack (magnitudewise) cuz mere (current ele) se <= ko to hum stack se pop krwa dete h in NSOR..............Caution: for some bars we might not find NSOR...pehle aise cases n se initialise krne par handle ho jate they ....par yahan na hi hum NSOR[] array use kar rhe...aur initially bhi hum stack me -1(cuz we are storing NSOL actually in stack) daal rhe n nhi 
+  
+        -- T. C of Approach 1, 2 are same but approach 2 does it in less passes of given input array
+
+15) Sliding Window Maximum.....last NGOR within window is the maximum for that position of window....There are several other solutions - 1 using deque, and 1 using PriorityQueue as well but don't bother about them
+16) Merge Overlapping Intervals.....sort the (start, end) pairs. Obviously only adjacent ones can overlap. But someone can overlap with the result of the previous overlap as well like candy crush game. so basically we need to remember order. So we use stack. Push the smallest pair in the stack initially. If the next/current/incoming pair begins after whatever is on the top of stack has ended, then obviously no overlap else overlap. In case of overlap merge. This can be done by correcting the ending time of the top of stack pair with the max of the 2 ending times which we are compairing
+17) Smallest Number Following Pattern ......... Very Unique....Might not remember
+     
+     sabse chota no when we use less numerical magnitude numbers at the most significant bits
+     
+     so let's assume that there are only i's...so the numbers will look something like 123456......
+     i) we have to remember the last number so that we can know the next number 
+
+    But now if we get 'd' we have to decrease the number.....so knowing just the last number is enough
+    But what if there are multiple d's .....so we should remember previous numbers as well
+    so basically we have to remember whichever order we have followed so far....so we can use stack
+
+
+    Observation through dry run on multiple examples --> smallest number tabhi aaega pattern follow karte hue jab hum D ke sequence k around filling Right to Left kare and not the other way round
+    
+   Solution --> i) stack me push aur ii) number increment to  humesha karna h chahe D aaye ya I ( number 1 se start karna pdega cuz MSB me less and less magnitude chhaiye)
+                    par jab I aaye to stack empty bhi karna hoga kyunki ho sakta h I ke baad phir se D ka sequence aane lage in whic case we might require opposite ordering from R to L. Therefore stack as LIFO
+   Caution...Edge case --> only 'i' or only 'd' as string imagine krke dekho
+
+18) Min Stack - min in O(1) time......apart from normal stack (kyunki baki functions abhi bhi btana h and that too in O(1) time), 1more stack to store just mins .........EASY
+19) Min Stack - min in O(1) time and O(1) space.....NOT STRAIGHTFORWARD....problem 18 me hum sare min values yaad rakh rhe they in a stack....abhi O(1) space me problem (problem is..O(1) time me min btana h) solve karna h matlab stack nhi use kar sakte...stack nhi use karna h aur sare previous min values bhi yaad rakhne h par kaise...min to har incoming element k sath change nhi hoga...to kyun nahin 
+       
+      - use a variable 'min' instead of stack                                        
+      - just remember the points of changes in min value. How?
+      - instead of incoming element (V) instead of V we always store (V + (V-M)) in stack when V is < M(current min)
+      - how we will be able to identify that at which places we have not actually stored V ,......for such places element in stack will be < M else not
+      - Caution: V ke jagah V + (negative no) store kar rhe to overflow ka issue aa sakta h. Thus have to use long type and it's wrapper class Long........       .intValue() to convert Long to int.....leetcode 155
+
+20) Two stacks in same array.....tos1 = -1, tos2 = n initially
+
+
+Linked List ( TODO: Go through Level up first then Foundation and then edit this .txt file...with exactly what needs to be remembered from LL in 1 place...do not segregate into Foundation LL and Level Up LL)
+--------------
+Advantage : to access non-contiguous locations in fragmented memory LL was introduced. Being able to access such locations is the advantage of LL
+Disadvantage over array : i) extra memory required to store address................ ii) to get to any node have to travel through other nodes
+
+removeLast() ....O(n)
+removeFirst().....O(1)
+addFirst()...........O(1)
+addLast()...........O(1)
+
+
+most common edge case ---> to be solved even before starting logic of problem........what if 0 child , what if 1 child
+
+1)mid of LL....slow, fast pointer
+   -- when even number of nodes and 
+         - we want left node as mid.......stopping condition of loop.....fast.next != null && fast.next.next != null
+         - we want right node as mid.......stopping condition of loop.....fast != null && fast.next != null      
+         - return slow
+         - Try not to blindly memorise this....draw and code
+
+2) Kth node from end of LL.....size() directly ya indirectly (khud se size implement nhi kr skte) use nhi kar sakte
+    - create initial separation of k then move the pointers with same speed.....near, far pointer.....far ko null tak nhi pahunchne dena h (have to keep within LL).....therefor have to use far != tail.....cuz tail ka next null hota h
+3) Merge two sorted LL
+    - compare and put in "res LL".....O(n) space
+    - O(1) space (No extra space) solution in Level Up
+4) Odd Even LL 
+    - collect odd nodes in a separate LL and even in separate LL then combine them.......also handle if all odd in input ....or all even in input.....O(n) space solution
+    - O(1) space (No extra space) solution in Level Up
+5) Reverse LL (Pointer Recursive)
+6) Intersection Point of 2 LL.......using map is not allowed......like "Kth node from the end of LL" problem, we'll have to create initial separation of diff in LL size in the larger LL
+7) Reverse nodes in group of K in LL  or K reverse in LL....O(1) no extra space solution in Level Up (In Lvel Up new object of LL is not created)
+8) Reverse a LL (data iterative)...Imp
+9) Reverse a LL (data recursive)...Imp
+10) Is LL a palindrome....using recusrion like problem 9
+11) Fold a LL
+12) Add 2 LL.....Very Imp....DIY without seeing solution
+
+
+Generic Trees
+------------------
+not two child like Binary Tree but has..... ArrayList<Node> children
+
+1) Construct Generic Tree from given input............stack to be used
+        - input me -1 dikha matlab we've got all info about a node ( ==> we now know about all the children of a particular node).....so that node should be popped out of stack (stack contains all the nodes about whom we do not have all the information i.e nodes whose all children are not known yet)
+        - aur agar -1 k alawa kuch aur dikha to? ....to push to karna hi h stack me par tree bnate hue chalna h....i.e mai kiska baccha hu uske children[] me khudko add kar lena h before pushing in stack.............mai kiska baccha hu ye kaise pta chalega? mere se just pehle jo stack me hoga wo hoga mera baap ...kyu? cuz we are give preorder traversal of a GT ..which is N then L child then R child 
+2) Height of GT.....max among height of all child + 1.......when we are talking in terms of edges(which is default) return -1 in base case or initialise with -1
+3)Level Order Traversal of GT.....queue to be used....RPA....remove, print, add
+4) Level Order - linewise  ( each level in new line) 
+    i) Solution1 ......2 queues....1 queue for current level, 2nd queue for nextLevel ....when mainQ is finished transfer the reference of childQ in mainQ
+    ii) Solution 2.......null marker after every child of all the members of current level are pushed.....iski implemetation error prone h
+    iii) Solution 3.......most used.....remove from queue till levelSize becomes 0 then newline then ove to next level
+    iv) Solution 4........store each child with its level....when the popped level is greater than the ongoing level we come to know that we have now entered next level
+5) Level Order - Zigzag
+    i) Solution 1....2 stacks + level variable
+    ii) Solution 2.....1 stack + 1 queue + level variable
+
+    matlab to bas 1 stack se hi h jisse order reverse ho jaye
+
+6) Remove leaves in a GT
+      - should remove from arraylist always from Right
+      - ask first isLeaf()? to each node...if yes then remove it..................only then call the recursive function on each child
+        Caution: can't call recursive call first on each child then ask each node that isLeaf()...........cuz in that case removing of child leaves might make parent a leaf which will get removed as now it has also become leaf and so on  the tree will become empty 
+7) Linearize a GT...........DIY
+     - breaks links of children last .....cuz removal from last of arrayList does not create any problem
+     - Caution....Imp...have to run the loop for node.children.size() > 1 and not node.children.size() != 1  ...............  cuz we have run the loop for nodes with non-zero number of children and until the count becomes one....but node.children.size() != 1 allows the loop to be run even for leaf nodes which have 0 children
+
+     - if faith is child ko linearise krke tail bhi bta  de then it would be an efficient approcah....as 1 loop will not be wasted in finding tail
+8) Distance between nodes.....DIY..............note required nodeToRoot() required........(rootToNode() might also work....need to verify though)
+9) Are GTs mirror in shape(not datawise)? ........DIY
+10) Is GT symmetric /foldable?
+    - In other words, they are asking ..... is the given GT mirror image of itself?
+11)
+
+
+Binary Trees
+----------------
+possible edge cases ---> 0 child, 1 child (only L child, only R child), 2 child (both L, R child)...........2 child is the main problem and not the edge case
+
+
+
+continue studying from..........linearise a GT
+
+30 turns per completely free full day......speed
+roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)
+
+obviously full free day to phir nhi milega
+therefore for revising foundaton 1,2 + level Up 1,2,3,4 ---> 730/15 = 49 days required.....roughly 2 months

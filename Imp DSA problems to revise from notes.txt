@@ -251,9 +251,54 @@ Binary Trees
 ----------------
 possible edge cases ---> 0 child, 1 child (only L child, only R child), 2 child (both L, R child)...........2 child is the main problem and not the edge case
 
+GT me for(Node child: node.children) se null handle ho jata h....BT me null ke liye if(node==null) {} wala check lgana pdta h
+
+Whenever we want more than 1 information from any node we have 2 options.....i) club the multiple information into a class and return that from every node or ii) return the info which is required to calculate the answer for parent and keep other info as static variables which can be changed by every node
+
+1) Construct BT from given input
+    - for GT we have arraylist of children which is dynamic, so while processing input for GT we just need to know when the children list of a particular node has ended. That's why '-1' marker in input
+    - But for BT we do not have a list. Instead we have 2 nodes reference holders - L child and R child. So while processing input we need to know whether the node we are considering is the L child or the R child of the parent node
+    - So in the input for constructing BT we use null for a non-existent child (it can be L or R child....if it is both then we use "null null" in input)...we'll always expect the first entry to be L child and next entry to be R child
+
+    - to construct a BT from the input format described above, we use 'state' .....same logic as in iterative preorder of GT
+    - state = 1 => next i/p is the L child of the node on tos(top of stack)
+    - state = 2 => R child
+    - state > 2 => both child of current node have already been plugged. Therefore time to pop the current node out of stack
+
+2) Height of a BT.......when we are talking in terms of edges(which is default) return -1 in base case......height of leaf = 0 => height of null = -1
+3) Iterative Pre, In, Post order traversal in BT (Note: Iterative not recursive)
+    - on lines of iterative preorder, postorder traversal in a GT but not exactly same
+    - here we have to check if L/R child exists in input only then push it in stack
+    TODO: play around with slightly different approaches....Refer notes
+4) Print K distance away......very Imp.........DIY
+    -  this k distance can be k directly below me or .......1 up then k-1 down or......2 up then k-2 down.....up up up kab tak? all the way to root.......So first we need to find nodeToRootPath
+    - traverse on nodeToRootPath[] and call recursive function on each of the node in it
+    -                   A
+                     /      \
+                    /        \
+                   /          \
+                 C            B
+                 
+      Let's say we want to find 3 distance away from B.... 1 up to A then 2 down can be 1 way.... now when we go 2 down from A obviously we don't want to go towards B...cuz going 2 down from A towards B would be an equivalent of 1 down from B but we wanted 3 away from B
+   - So we should mark B as 'blocker' node when we try to go down from A through initial recursive call.....when blocker node is encountered in our way down we should just return
+
+5) Transform back from a left cloned tree .....DIY
+6) largest BST subtree
 
 
-continue studying from..........linearise a GT
+Binary Search Trees
+-------------------------
+Structure based algos like size(), sum(), height(), diameter(), display() are same in BT and BST
+But data based algos like max(), min(), find() are efficient in BST as compared to BT
+
+BST --> O(log n)
+BT --> O(n)
+
+1)
+
+
+
+continue studying from..........
 
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)

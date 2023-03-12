@@ -178,6 +178,9 @@ most common edge case ---> to be solved even before starting logic of problem...
 12) Add 2 LL.....Very Imp....DIY without seeing solution
 
 
+Foundation 2
+----------------
+
 Generic Trees
 ------------------
 not two child like Binary Tree but has..... ArrayList<Node> children
@@ -277,7 +280,7 @@ Whenever we want more than 1 information from any node we have 2 options.....i) 
                      /      \
                     /        \
                    /          \
-                 C            B
+                  C            B
                  
       Let's say we want to find 3 distance away from B.... 1 up to A then 2 down can be 1 way.... now when we go 2 down from A obviously we don't want to go towards B...cuz going 2 down from A towards B would be an equivalent of 1 down from B but we wanted 3 away from B
    - So we should mark B as 'blocker' node when we try to go down from A through initial recursive call.....when blocker node is encountered in our way down we should just return
@@ -294,11 +297,50 @@ But data based algos like max(), min(), find() are efficient in BST as compared 
 BST --> O(log n)
 BT --> O(n)
 
-1)
+Inorder traversal of BST gives ascending order
+
+1) Construct BST from given input
+   - sort the input array if not already sorted
+   - divide and conquer like mergesort (i.e divide in 2 almost equal halves....middle node is separate from these 2 halves) to get a balanced BST (whose height difference of left and right child is not more than 1)
+   - currentNode.left = left recursive call
+     currentNode.right = right recursive call
+2) Remove nodes from BST (Recursive)
+   - 4 cases, when the node to be removed is a .... i) 0 child node or ......ii) 1 child (L) node or.......iii) 1 child (R) node.....or iv) 2 child node (trickiest)
+   - when 2 child node is to be removed, simply removing it will break the tree .....so it needs to be replaced with some other node....it can be replaced with either max of left subtree or min of right subtree....and then do not forget to remove the chosen max/min from left/right subtree respectively....and that will not be a problem as max/min can only be found at leaf nodes  
+
+   - Recursive solution takes recursive space, iterative solution will take no extra space i.e it'll take O(1) space....That's why have attached iterative solution in Foundation 2 notes for add, delete in BST.....Iterative solution seems error prone...but try once w/o looking
+   - BST problems should always be done iteratively.....Level Up 2...Tree....BST Set.....LCA in BST
+3) Replace with sum of larger.... Imp....DIY...in both ways....LNR and RNL as well
+                        A
+                     /      \
+                    /        \
+                   /          \
+                  C            B
+
+    - For C --> A+ B is larger
+      For A --> B is larger
+4) LCA  in a BST
+    - LCA in a BT --> O(n) space + recursive space (nodeToRootPath[] required)
+    - LCA in a BST --> O(1) space + recursive space
+5) Print in range
+6) 2 Sum BST....Very Imp....O(h) == O(log n) for a balanced BT
+    - we want answer pairs in increasing order. Therefore inorder traversal of BST (Any node cannot be used as both the elements of the pair)
+
+    - 3 approaches ............   Approach 1 has better S.C.  ................   Approach 2 has better T.C  ..........    Approach 3 --> best of both worlds...approach 1,2..........while talking about S.C. we are not including the recursive stack space required for solving the main problem, we are just talking about how much extra space is required
+    - Approach 1          T.C.: O(nh),      S.C.: O(h)
+         - traverse all nodes, at each node find() the complement in BST...........complement = targetSum - currentNode.data........T.C. of find() in BST is O(h) == O(log n)
+    - Approach 2          T.C.: O(n),        S.C.: O(n)
+         - make an arrayList by traversing all of BST....then the problem reduces to 2 Sum problem on an array which can be solved using 2 pointers (left, right)
+    - Approach 3          T.C.: O(n),        S.C.: O(h) ..............Just like Approach 2 but we just avoided storing in arrayList.....next element on demand.....streaming
+         - left pointer can be obtained by InorderBSTIterator, right pointer can be obtained by ReverseInorderBSTIterator......cannot use recursive stack for iterator, need manual stack ( a data structure created in heap which could maintain state till when iterator is called the next time) so that it can be controlled.....use 'state' variable to code iterative inorder traversal (Refer Generic Trees section of Foundation 2)
+         - If we use morris traversal to code iterator then we can reduce the S.C. to O(1) .......... Level Up 2 - Tree - Traversal Set - leetcode 173 Binary Search Tree Iterator
+          
+
+HashMaps and Heaps
+----------------------------
 
 
-
-continue studying from..........
+continue studying from.........
 
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)

@@ -338,10 +338,84 @@ Inorder traversal of BST gives ascending order
 
 HashMaps and Heaps
 ----------------------------
+a particular data structure is unordered ==> the order of insertion is not the same as order of storing
+
+Inbuilt HashMap functions --> getOrDefault(key, defaultValue), putIfAbsent()
+
+Heap 
+   - PriorityQueue<Integer>pq = new PriorityQueue<>(); // min heap
+   - PriorityQueue<Integer>pq = new PriorityQueue<>(Collections.reverseOrder()); // max heap 
+     Alternatively for max heap
+       -  PriorityQueue<Integer>pq = new PriorityQueue<>( (a,b) -> {
+                return b-a;
+          });
+   - add(), remove() from heap --> O(log n)     peek() --> O(1)
+
+   - HeapSort (add 1 by 1 in heap then remove 1 by 1 to get sorted order) --> T.C.: O(nlog n)          S.C.: O(n) ... There is an inplace version too // TODO: write more about the inplace version
+    
+1) k largest elements
+   - Approach 1: using max heap.....O( (n+k) log n)
+        - insert all elements in heap O(nlog n) time  then removal of k elements from heap in O(klog n) time
+   - Approach 2: using min heap......O( (n+k) log k) .... better approach as k <= n
+        - at any point contains the <=k largest elements found yet.........so initially we push k elements in the heap in O(klog k) time....now when the (k+1) th element arrives and if it is bigger than the current min in the heap, since the heap can only contain <=k elements ...min has to be removed and then replaced with the incoming element..and since we are removing min, we can say heap will contain "largest" elements at any point of time....Similarly we have to push remaining elements in the heap.....so total time complexity of pushing n elements in a heap of size k will be O(n log k)
+        - now when all the elements are pushed in heap once...heap will contain the final k largest elements......the simulataneous removal of k largest elements from heap in O(klog k) time
+2) Sort k nearly sorted array ..... every element of the array is at max displaced k spots left or right to its position in the sorted array
+   - Approach 1: sort the array in O(nlog n) time...Note we did not use the fact that "at max k displaced"
+   - Approach 2: using min heap O(n log k)  .... There will be <= (k+1) elements in the heap at any point of time
+        - In sorted array min most element will be at 0th index and since it cannot be displaced on left, (no space...no valid array index on left) it can only be displaced upto index (k+0) on the right....so if we consider (k+1) elements from index 0 to index k, we'll definitely get the min element ...so heap of size (k+1) is enough... once we remove an element from heap to get current min only then we should add any further element in the heap...since the number of element in the heap should not exceed (k+1) 
+        - add first then remove from heap is also ok but that'll just increase heap size which is not really needed .... kyunki heap me agar zaroort se zyada elements hi rakhna hota to n element hi kyu nhi rakh liye
+3) Longest consecutive sequence of elements (like 5,6,7,8..... these can occur in any order and at any index which need necessarily be continuous indexes)   // TODO: think whether this should be in this list or is it too easy
+   - either need to check ki previous element h ki nhi or need to check ki next element h ki nhi in the given sequence ...this search needs to be in as in time as possible.... therefore store every element in HashMap
+   - we also need to print the sequence itself at the end... so need to know the starting or ending point of the LConsecutiveSequence (along with the size of the sequence of course) ...... therefore also store a marker in hashmap corresponding to every element indicating whether it is the starting/ending element or not
+   - Algo:
+        - 1. for every element in hashmap which is a starting/ending point, check if prev/next element exists....if it does current element is not the starting/ending point....mark for current element accordingly
+        - 2. now for every element in hashmap which is still a starting point (an actual one not an assumed one) ..... count how many elements are present in sequence and find the longest such sequence
+
+4) Implementation of PriorityQueue using heap .... Imp
+   - add(), remove() ... O(log n) ..... why so? cuz we always maintain a complete (balanced) heap .... and add/remove operations on a balanced tree are O(log n) .. like AVL(balanced BST) ...cuz only for balanced tree height of tree , h = log n  (complete --> all of previous h-1 levels are completely filled, and all levels are strictly filled from L to R. In other words there can be no R child if any L child is skipped) (balanced --> difference between height of left,right child subtrees is not more than 1) (a complete tree is always a balanced tree)
+   - peek() ...O(1)
+   - heap should be implemented using ArrayList and not using a BT (heap is not stored but visualised as a BT) cuz   
+        i)  since we have to maintain a complete tree therefore to find out where to add() we need to do levelOrderTraversal which is O(n)
+        ii) heap creation requires a upHeapify internal functionality which is movement from child to parent ...... which is not easy in a BT
+   - add () --> uses upHeapify/downHeapify()
+     remove() --> uses downHeapify
+
+   - creation of heap (addition of n elements) can be done in 2 ways
+       - online data (data coming 1 by 1...in other words streaming) ...each intermediate stage is heap ....uses upHeapify in add() ......O(nlog n) for creation of heap
+       - complete data present initially .... first add all data in data structure then start doing downHeapify() from every node beginning with leaf nodes to make the data structure an actual heap ......O(n) for creation of heap
+
+   - both upHeapify and downHeapify converts a non-heap to heap .... only their movement is different
+
+   - upHeapify (idx) - heapification might be required at parent too in addition to at idx (idx: current ....current ko parent se compare karna h isliye current paas kar rhe....subsequently pidx might become idx i.e upHeapify(idx) --> upHeapify(pidx)) 
+       -  add() = add to last of arrayList then upHeapify(idx) .... why to last ? so that operation can be done in O(1)
+       -  let's talk about minHeap....everything on left, right child subtrees must be greater than root
+       -     A = 5
+           /    \
+      B=7     C = 3
+     
+
+         let's say we have added at C (C is a leaf node) . If C > A then all is fine. Else if C is less than the current min i.e A in this subtree, then C should be moved in place of A and A should be moved in place of C
+         if we replace 3 with 5 then everything is fine as descendants should anyways be greater
+         but initially everything below A was > 5, but will those be > 3 when 3 is moved in place of A?? might not ..... so after swapping subtree rooted at A might need heapification
+         also  parent of A was exepecting everything below it to be greater but moving this smaller value 3 in place of A might change that so parent of A might need heapification too 
+         and so on we keep on moving up the tree ensuring everything below the checked node is a heap
+
+   - downHeapify (0)  - heapification might be required at child too i.e downHeapify(0) --> downHeapify(childIdx)
+       - remove() --> highest prioity element is the only accessible element in the heap....so now when it needs to be removed, removing from beginning of arraylist will be O(n) due to shifting whereas removing from last of arrayList is O(1). 
+       - For this 0th and last leaf node are swapped. which arises the need for downHeapification beginning at 0th 
+         So after swapping , higher element is placed at 0th which might result in making the heap --> not heap ( parent might now no longer be the min among parent, left child, right child)
+         To resolve this, parent is swapped with min child which might again end up in making that child subtree "not heap"
+         and so on we keep on moving down the tree checking that all the way to below is a heap (Note: we are just comparing current node and its child for heap property....assuming ki child subtree to leap hoga hi...kyunki swap krne se pehle tak to sab kuch heap tha hi....isliye agar currentnode, L child, R child milke agar heap property satisfy krta h to we stop going down the tree)
+
+   - upHeapify requires moving from a node to its parent
+      - Formula for the same: pidx = (idx-1)/2
+   - downHeapify requires moving from node to child
+      - Formulae:
+         i)  lc = 2 * pidx + 1
+         ii) rc = 2 * pidx + 2
 
 
-continue studying from.........
-
+continue studying from.........check whether have written all information about implementation of heap.....continue from median priority queue 12 turns
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)
 

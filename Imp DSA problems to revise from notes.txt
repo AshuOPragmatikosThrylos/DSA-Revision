@@ -372,6 +372,9 @@ Heap
         - 2. now for every element in hashmap which is still a starting point (an actual one not an assumed one) ..... count how many elements are present in sequence and find the longest such sequence
 
 4) Implementation of PriorityQueue using heap .... Imp
+   - Most important part: 
+       i) with what parameters upHeapify(), downHeapify() are called for the first time
+      ii) understanding and implementation of upHeapify, downHeapify
    - add(), remove() ... O(log n) ..... why so? cuz we always maintain a complete (balanced) heap .... and add/remove operations on a balanced tree are O(log n) .. like AVL(balanced BST) ...cuz only for balanced tree height of tree , h = log n  (complete --> all of previous h-1 levels are completely filled, and all levels are strictly filled from L to R. In other words there can be no R child if any L child is skipped) (balanced --> difference between height of left,right child subtrees is not more than 1) (a complete tree is always a balanced tree)
    - peek() ...O(1)
    - heap should be implemented using ArrayList and not using a BT (heap is not stored but visualised as a BT) cuz   
@@ -384,28 +387,30 @@ Heap
        - online data (data coming 1 by 1...in other words streaming) ...each intermediate stage is heap ....uses upHeapify in add() ......O(nlog n) for creation of heap
        - complete data present initially .... first add all data in data structure then start doing downHeapify() from every node beginning with leaf nodes to make the data structure an actual heap ......O(n) for creation of heap
 
-   - both upHeapify and downHeapify converts a non-heap to heap .... only their movement is different
+   - both upHeapify and downHeapify converts a non-heap to heap .... only their direction of movement is different
 
    - upHeapify (idx) - heapification might be required at parent too in addition to at idx (idx: current ....current ko parent se compare karna h isliye current paas kar rhe....subsequently pidx might become idx i.e upHeapify(idx) --> upHeapify(pidx)) 
-       -  add() = add to last of arrayList then upHeapify(idx) .... why to last ? so that operation can be done in O(1)
+       - idx = wo index jisko uske parent se compare karna h
+       -  add() = add to last of arrayList then upHeapify(idx) .... why to last ? so that operation can be done in O(1) .... here idx = last index when initial call was made
        -  let's talk about minHeap....everything on left, right child subtrees must be greater than root
        -     A = 5
-           /    \
-      B=7     C = 3
-     
+           /       \
+         B=7     C = 3
+      
+         A is the parent of C not the root of heap
 
-         let's say we have added at C (C is a leaf node) . If C > A then all is fine. Else if C is less than the current min i.e A in this subtree, then C should be moved in place of A and A should be moved in place of C
+         let's say we have added at C (C is a leaf node) . If C > A then all is fine. Else if C <  A in this subtree, then C should be moved in place of A and A should be moved in place of C
          if we replace 3 with 5 then everything is fine as descendants should anyways be greater
-         but initially everything below A was > 5, but will those be > 3 when 3 is moved in place of A?? might not ..... so after swapping subtree rooted at A might need heapification
-         also  parent of A was exepecting everything below it to be greater but moving this smaller value 3 in place of A might change that so parent of A might need heapification too 
+         but initially everything below A was > 5, but now will those be > 3 when 3 is moved in place of A?? might not ..... so after swapping, subtree rooted at A  might need heapification ... i.e heapification might be needed at parent
+         so we moved from child to parent ...... upHeapify(idx) --> upHeapify(pidx) 
          and so on we keep on moving up the tree ensuring everything below the checked node is a heap
 
    - downHeapify (0)  - heapification might be required at child too i.e downHeapify(0) --> downHeapify(childIdx)
-       - remove() --> highest prioity element is the only accessible element in the heap....so now when it needs to be removed, removing from beginning of arraylist will be O(n) due to shifting whereas removing from last of arrayList is O(1). 
+       - remove() --> highest priority element is the only accessible element in the heap....so now when it needs to be removed, removing from beginning of arraylist will be O(n) due to shifting whereas removing from last of arrayList is O(1). 
        - For this 0th and last leaf node are swapped. which arises the need for downHeapification beginning at 0th 
          So after swapping , higher element is placed at 0th which might result in making the heap --> not heap ( parent might now no longer be the min among parent, left child, right child)
          To resolve this, parent is swapped with min child which might again end up in making that child subtree "not heap"
-         and so on we keep on moving down the tree checking that all the way to below is a heap (Note: we are just comparing current node and its child for heap property....assuming ki child subtree to leap hoga hi...kyunki swap krne se pehle tak to sab kuch heap tha hi....isliye agar currentnode, L child, R child milke agar heap property satisfy krta h to we stop going down the tree)
+         and so on we keep on moving down the tree checking that all the way to below is a heap or not (Note: we are just comparing current node and its child for heap property....assuming ki child subtree to leap hoga hi...kyunki swap krne se pehle tak to sab kuch heap tha hi....isliye agar currentnode, L child, R child milke agar heap property satisfy krta h to we stop going down the tree)
 
    - upHeapify requires moving from a node to its parent
       - Formula for the same: pidx = (idx-1)/2
@@ -414,8 +419,51 @@ Heap
          i)  lc = 2 * pidx + 1
          ii) rc = 2 * pidx + 2
 
+   - Note: swapping k baad hi call hota h to upHeapify or downHeapify ... not talking about initial call.....talking about recursive call
 
-continue studying from.........check whether have written all information about implementation of heap.....continue from median priority queue 12 turns
+5) Median Priority Queue ... instead of max/min the heap should return median (middle element) in current sorted array in O(1) time 
+   - PQ can only be min/max heap....we have to somehow adapt MPQ from a PQ
+   - Internally MPQ for user = PQ1(max) + PQ2(min) ..... if MPQ = 10, 20, 30, 40, 50, 60 then PQ1 = 10, 20, 30  and PQ2 = 40, 50, 60
+   - When we have to add() in MPQ how would we know whether internally we have to add in PQ1 or PQ2 ? if the incoming element is greater than peek of PQ2, then we add that element in PQ2 else PQ1
+   - If we follow above we'll end up adding all elements in PQ1 itself and none in PQ2 cuz initially both of PQ1, PQ2 are empty and above comparison can only be done when PQ2 is non-empty
+   - Also the size of PQ1, PQ2 should be more or less the same so that we can get median and not some random element at root of the heap
+   - So whenever the size difference of PQ1, PQ2 becomes > 1, we shift 1 element between them to reduce the difference ... Imp point // easy to miss
+
+6) Comparable vs Comparator
+   - both are interfaces
+   - if a class implements Comparable<T> , it has to implement the compareTo(T other) function
+   - if a class implements Comparator<T> it has to implement the compare(T child, T parent) function
+   - For min heap, compareTo(T other) should be implemented like below
+     int compareTo (T other) {
+           return this.x - other.x;  // x is a member of T class
+     }
+   - For max heap, compareTo(T other) should be implemented like below
+     int compareTo (T other) {
+           return other.x - this.x;  // x is a member of T class
+     }
+   - For implementing Comparator<T> , compare() should be implemented like below
+     int compare(T child, T parent) {
+         return child.x - parent.x;
+    }
+    - When we don't know that on which basis to compare any two objects, we keep several Comparators prepared. Each comparator does comparison on basis of 1 particular thing
+    - How to use comparator??
+        class StudentWeightComparator implements Comparator<Student> {
+              int compare(Student s1, Student s2) {
+                    return s1.wt - s2.wt; 
+              }
+        }
+        class StudentHeightComparator implements Comparator<Student> {
+              int compare(Student s1, Student s2) {
+                    return s1.ht - s2.ht; 
+              }
+        }
+
+         PriorityQueue<Student> pq = new PriorityQueue<>(new StudentWeightComparator());
+
+
+
+
+continue studying from.........
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)
 

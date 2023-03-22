@@ -470,8 +470,15 @@ Heap
    - and time complexity for any operation on HM ≡ time complexity for that operation on 1 single bucket = O(λ) where λ = number of elements in HM (n) / number of buckets in HM or cell in array (N) = n/ N
    - we never let λ cross a particular value (threshold)....so we can say O(λ) ≡ O(constant) or O(1)
    - so average T.C. of any HM operation is O(1) but worst case is still O(n) ..... all elements of HM in 1 single bucket
-   - How do we ensure λ stays under a threshhold (k) ? When λ becomes > k (why will λ change in the first place? with each insertion in HM, n increases but N doesn't change so λ increases) , we double the number of buckets and do reshuffling. This is called rehashing......is a costly operation but its frequency decreases with each time λ crosses k....our sacrifice for a O(const) T.C.
-   - How do we know which element should be placed/searched in which bucket? 
+   - How do we ensure λ stays under a threshhold (k) ? When λ becomes > k (why will λ change in the first place? with each insertion in HM, n increases but N doesn't change so λ increases) , we double the number of buckets and do reshuffling. This is called rehashing()......is a costly operation but its frequency decreases with each time λ crosses k....our sacrifice for a O(const) T.C.
+   - How do we know which element should be placed/searched in which bucket? hashFunction(key) which returns bucketIndex
+   - 1 way of implemetation of hashFunction() can be as follows
+     int hashFunction(K key) {
+        return Math.abs(ket.hashCode()) % buckets.length;
+        
+        // key.hashCode() not hashCode(key)
+        // hashCode() can return -ve integer as well
+    }
 
 
 

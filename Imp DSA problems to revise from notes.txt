@@ -445,7 +445,7 @@ Heap
      int compare(T child, T parent) {
          return child.x - parent.x;
     }
-    - When we don't know that on which basis to compare any two objects, we keep several Comparators prepared. Each comparator does comparison on basis of 1 particular thing
+    - When we don't know that on which basis to compare any two objects, we keep several Comparators prepared. Each comparator does comparison on basis of 1 particular thing ( TODO: write the differences properly. Refer durgasoft, code decode, telusko on youtube for the same)
     - How to use comparator??
         class StudentWeightComparator implements Comparator<Student> {
               int compare(Student s1, Student s2) {

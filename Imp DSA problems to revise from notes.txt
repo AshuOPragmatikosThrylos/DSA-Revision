@@ -5,72 +5,103 @@ Arrays
 --------
 
 1) Bar Chart....best pattern question
-2) Subsets of Array
-3) Ceil and Floor......Application of binary search
-4) First Index, Last Index......Application of binary search
+2) Rotate an array by k places.....reverse parts then reverse whole
+3) Subsets of Array....easier using recursion
+4) Ceil and Floor......Application of binary search
+5) First Index, Last Index......Application of binary search
 
 
 2D Arrays
 ------------
 
-1) Spiral Traversal....box k andar box se solve kro, innermost box might not have all walls
-2) Rotate Matrix by 90 degree clockwise.......... Transpose me [i][j] ko [j][i] se swap karna hota h but this cannot be done for all i,j combinations.....only for half of total combinations...in which j>=i
+1) Spiral Traversal....box k andar box se solve kro, innermost box might not have all walls.....count < tne in outer as well as inner loops
+2) Rotate Matrix by 90 degree clockwise.....transpose given matrix then reverse each row...... Transpose me [i][j] ko [j][i] se swap karna hota h but this cannot be done for all i,j combinations.....only for half of total combinations...in which j>=i...j begins from i
 3) Search in a sorted 2D array
 
 
 Strings, String Builders, ArrayLists
 ------------------------------------------
 
-1) Print all substrings
+1) Print all substrings....not using recursion
 2) Print all palindromic substrings..........Brute force
 3) String compression
-4) Print all permutations of a string - iterative (Not at all intuitive).....divide by n then (n-1)....all the way to 1...divide kya? kaunsawa permutation and the subsequent quotients....jo jo remainder aate jata h remaining string me se usko nikalkar print krte rho
-5) Remove primes from arraylist..........Conclusion: always remove elements from end of arraylist....taki shifting (due to deletion from mid arraylist) k wajah se garbar na ho jaye
+4) String Interning and String Immutatbility; StringBuilder
+5) Print all permutations of a string - iterative (Not at all intuitive).....divide by n then (n-1)....all the way to 1...divide kya? kaunsawa permutation and the subsequent quotients....jo jo remainder aate jata h remaining string me se usko nikalkar print krte rho
+6) Remove primes from arraylist..........Conclusion: always remove elements from end of arraylist....taki shifting (due to deletion from mid arraylist) k wajah se garbar na ho jaye
 
 
 Recursion
 ------------
 
-1) Tower of Hanoi
-2) First Index, Last Index in array (Iterative wale me binary search use kar skte...see above in this text file under Arrays section)
-3) All indices of array..........DIY without seeing solution
-4) Get Subsequence
+1) Tower of Hanoi.....recursiveCall1(swap d, h) --> print (s, d) --> recursiveCall2(swap s, h) 
+2) First Index, Last Index in array
+3) All indices of array..........DIY without seeing solution (high chances of mistake in 1st attempt)
+4) Get Subsequence.....understanding base case is imp
 5) Get KeyPad Combination.......DIY if revised 4
-6) Get Stair Paiths....ek ek karke hi sirf to decrement nhi kar rhe  ==> n can become < 0 too in just 1 step
-7) Get Maze Path with Jumps..........DIY without seeing solution
+6) Get Stair Paths....ek ek karke hi sirf to decrement nhi kar rhe  ==> n can become < 0 too in just 1 step.....when n<0 what to return from base case? empty list cuz no way to get to 0 stairs
+7) Get Maze Path with Jumps..........DIY without seeing solution...mixture of get Stair Paths and get Maze Paths.....Good Problem for revision
+
 8) Print Subsequence............ on way up...ans bnate chalo.....compare with "Get Subsequence" which is "on way down" soln
-9) Print stair paths.....path + 1 krne se kya hoga aur 1+ path krne se kya hoga ye socho
+print wale sare using "on way up"....pass a param, ans bnate chalo.....to save space we do not follow "on way down"
+get wale sare using "on way down"...... return something from node wala tarika
+
+option could be include/exclude or include 1 among many
+
+recursion is of two types
+   1) on way down....tum jawab do hum apna jawab bnaenge.....root pe final ans milta h
+   2) on way up...base case/leaf pe final ans milta h
+
+9) Print stair paths.....path + 1 krne se kya hoga aur 1+ path krne se kya hoga ye socho  
 10) Print Maze paths....notice the two ways...call smart, base case normal ......call stupid, base case smart.....bas ye call krne ka tareeka revise krwana tha notes me se....waise to question me dam nhi
+
 11) Print permutations...sare characters ko starting character banne ka mauka dena hoga.......compare with "Print all permutations of a string - iterative" under Strings section
 12) Print Encodings......DIY.........2 options - 1char, 2 char ko parse karna h sari possibilities bnane k liye .....2 char hona bhi chahiye pehle....aur wo bhi 2char >26 nhi hona chahiye
 13) FloodFill...backtracking ka matlab apne footprints mita dena....par aisa krna hi kyu h? .....ya to previously exploration me ans nhi mila ya phir mil gya and aur bhi mil sakta h cuz multiple ans are possible.....understand visited array ka significance ...needed when we go in dir and 180 degree opposite dir as well..to prevent infinite loop visited array lena padta h.....understand why Red Euro symbol k jagah par return likhna kyu required h
-
+  
 By now I am wondering kab kab "on way up" use karna h aur kab "on way down"....kahin to notes me likha tha ye shayd...maybe level up k recursion ya DP me mil jaye.....TODO: mile to yahan likh dena reason
 
 for now --> man me socho jisme recursiveAns se myAns bnana hard lge...usme "on way down" nhi use krna
-
+  
 14) Target Sum Subsets.....pehle subsets bna lo phir target se subsetSum compare kro.........baad me jab poora subset bn gya h tab jakar loop lgakar sum calculate krne se accha h ki jaise jaise "on way up" jate ho waise waise subsetSum calculate krte rho
 15) N Queens.....Very Very Imp.....how solution thought from scratch all the way to its code
+
+level - row - passed as param
+option - which column of the current row (option for placing a queen)
+ 
+if safe
+then place a queen at that (row, col) ....chess[row][col] = 1....after recursive call has to be backtracked
+and then check for next row....recursive call for row+1.....ans bnate chalo...row-col in string psf
+
+safety check in 3 directions
+from current row to above rows only (not below rows)
+in 3 directions - north-west, north, north-east
+ 
 16) Knights Tour
 
-
+ 
 Stacks and Queues
 -----------------------
 
 1) Read from OOPS | Swap Game 3 onwards to just before start of Arrays and Queues section
 2) Dynamic stack...using array.....create array of double size, change reference..........seems O(n) due to copying all elements of old array into new one...but push() even now is O(1)......dynamic me kabhi overflow msg print krne ki zaroort nhi pdti (same with dynamic queue as well.....front pointer humesha update krte hue chalna h)....tos pointer humesha update krte hue chalna h
-
+ 
 Queue<> ke aur Stack<> ke alag alag se functions yaad rkhne se accha h always use ArrsyList<> as stack or queue a/c to need
 
 Stack<> --> push(), pop()
 Queue<> --> add(), remove()
-
-3) Normal Queue
+ 
+3) Normal Queue....two pointers front and back not needed....front, size is enough....note why need to use modulus.....X = (front + Y) % arr.length......observe the condition of display function loop....specifically what it should not be
 4) Balanced Brackets....3 cases should be dealt #OB> #CB or #OB < #CB or inappropriate pair(jo bracket sabse baad me aaya h(open hua h) wo sabse pehle close honi chahiye)  
 5) Duplicate Brackets....meaning of duplicate brackets smjhna is tricky.........we don't talk about duplicate brackets if the given expression is not balanced (Balanced Brackets).......when CB is encountered pop till OB............. agar CB se just pehle OB hi mil jaye ( no characters in between) ==> duplicate brackets
+
+strategy: push everything in stack which is not CB then start popping and thinking
+
 6) Celebrity Problem.....Very Imp....question padhkar bilkul nhi lagta ki ye stack problem ho sakta h...aur stack se kaise solve kar skte wo bhi itna zyada intuitive nhi..............Approach --> all possible celebrities ko stack me store rkho (initially sare k sare ko possible celebrity maankar stack me rakh do).... then 2 do krke pop kro aur ek possibly celebrity ko filter out kar do........ ye repeated filtering out tab tak krni h jab tak stack me bas 1 possible celebrity nhi reh jata....jo reh gya h wo bhi possible celebrity h confirm celebrity nhi ( there can be either 0 celebrity or only 1 celebrity...kind of like Saddle Point under 2D Arrays section)...to ab is possible celebrity par celebrity h ya nhi ka check phir lga do ......ye stack solution ka TC O(n) kaise h ye smjhna bhi zaroori h
-7) Postfix Evaluation and Conversion....Imp type
-8) Infix evaluation .....Very Imp.....Interview me ye 100 % shi ho jaye matlab tum alag hi level pe ho
+
+7) Postfix Evaluation and Conversion....Imp type...Refer Prefix Evaluation and Conversion as well...direction of reading string  
+note while converting to infix, brackets use krni h 
+
+8) Infix evaluation .....Very Very Imp.....Interview me ye 100 % shi ho jaye matlab tum alag hi level pe ho
 
    - 2 stacks used 1) for operands 2) for operators and ')'
    - 4 cases bnta h ....what to do when encounter ......1) ')'       2) '('    3) operators 4) operands
@@ -81,19 +112,25 @@ Queue<> --> add(), remove()
         -- operators encountered --> jab tak operators stack empty nhi ho jata ya jab tak operators stack ke top pe '(' nhi dikh jata ya jab tab operators stack ke top par current char se lower precedence(matlab agar barabar precedence hua tab bhi evaluate krwana h) (of course precedence check krne k liye ek alag function likhna pdega ) ka character nhi aa jata.............tab tak purane operators ko evaluate krwate rho aur result ko operands stack me daalte rho (Note: even after processing whole infix expression, operator stack might not be empty (ex: 2+3*6) to phir se evaluate then push result in operand stack krna pdega and at last we'll find result in top of operand stack)....usi k baad current operator ko stack me daal sakte
 
        Note: poore code me operators stack me se hi bas pop krte h kabhi kabhi....operands me se pop bas evaluate krte samay krte h varna nhi
-
+ 
 
 9) Queue to Stack adapter - push efficient.......Imp type
     -- queue use krke stack bnana h
     -- 2 queues use karna pdega...mainQ, helperQ
 10) Queue to Stack adapter - pop efficient .............DIY
 11) Stack to Queue - add efficient...........slightly different from previous adapter questions...references mainS aur helperS ka interchange nhi karna h 
+
 12) Next Greater Element to/on the Right ...NGOR
 
+        In ans[] always store index of ans and not the ans(array element)
+        
         main: NGOR
         derivatives: NGOL, NSOR, NSOL
 
         stack contains --> ifwahnbfy --> indices for which ans has not been found yet
+
+        algo --> pehle dusro k bare me socho....stack me se tum(current ele) kis kis k ans ho   
+                 phir khudke bare me.....mera ans bhi pta krna h...therefore put myself in stack
 
         OL --> traverse R to L.....every cell initiallised with -1
         OR --> traverse L to R......every cell initialised with n(=arr.length)
@@ -101,15 +138,20 @@ Queue<> --> add(), remove()
         NG --> arr[st.peek()] < arr[i]
         NS --> arr[st.peek()] > arr[i]
 
-13) Stock Span....it's basically i - NGOL[i]
+13) Stock Span....it's basically i - NGOL[i]...stock span definition: 1st day before today where stock price was higher than today
+
 14) Largest Rectangle/Area in Histogram.....Refer Level Up notes instead
         -- Approach 1 --> NSOR, NSOL used..........mutiple pass solution
-        -- Approach 2 --> 1 pass solution ......... NSOR jab hume milta h to uska hum kaise use krte they in previous solution?.....to ye socho aur NSOR ka code hi likho....NSOL will be whatever is below me in stack (magnitudewise) cuz mere (current ele) se <= ko to hum stack se pop krwa dete h in NSOR..............Caution: for some bars we might not find NSOR...pehle aise cases n se initialise krne par handle ho jate they ....par yahan na hi hum NSOR[] array use kar rhe...aur initially bhi hum stack me -1(cuz we are storing NSOL actually in stack) daal rhe n nhi 
+        -- Approach 2 (Imp...although most people don't know this) --> 1 pass solution ......... NSOR jab hume milta h to uska hum kaise use krte they in previous solution?.....to ye socho aur NSOR ka code hi likho....NSOL will be whatever is below me in stack (magnitudewise) cuz mere (current ele) se <= ko to hum stack se pop krwa dete h in NSOR..............Caution: for some bars we might not find NSOR...pehle aise cases n se initialise krne par handle ho jate they ....par yahan na hi hum NSOR[] array use kar rhe...aur initially bhi hum stack me -1(cuz we are storing NSOL actually in stack) daal rhe n nhi 
   
         -- T. C of Approach 1, 2 are same but approach 2 does it in less passes of given input array
 
-15) Sliding Window Maximum.....last NGOR within window is the maximum for that position of window....There are several other solutions - 1 using deque, and 1 using PriorityQueue as well but don't bother about them
-16) Merge Overlapping Intervals.....sort the (start, end) pairs. Obviously only adjacent ones can overlap. But someone can overlap with the result of the previous overlap as well like candy crush game. so basically we need to remember order. So we use stack. Push the smallest pair in the stack initially. If the next/current/incoming pair begins after whatever is on the top of stack has ended, then obviously no overlap else overlap. In case of overlap merge. This can be done by correcting the ending time of the top of stack pair with the max of the 2 ending times which we are compairing
+15) Sliding Window Maximum
+        -- Approach 1: monotonic stack (NGOR) - last NGOR within window is the maximum for that position of window
+        -- Approach 2: monotonic deque
+
+16) Merge Overlapping Intervals.....sort the (start, end) pairs. Obviously only adjacent ones can overlap. But someone can overlap with the result of the previous overlap as well like candy crush game. so basically we need to remember order. So we use stack. Push the smallest pair in the stack initially. If the next/current/incoming pair begins after whatever is on the top of stack has ended, then obviously no overlap else overlap. In case of overlap merge. This can be done by correcting the ending time of the top of stack pair with the max of the 2 ending times which we are comparing
+
 17) Smallest Number Following Pattern ......... Very Unique....Might not remember
      
      sabse chota no when we use less numerical magnitude numbers at the most significant bits
@@ -125,22 +167,32 @@ Queue<> --> add(), remove()
     Observation through dry run on multiple examples --> smallest number tabhi aaega pattern follow karte hue jab hum D ke sequence k around filling Right to Left kare and not the other way round
     
    Solution --> i) stack me push aur ii) number increment to  humesha karna h chahe D aaye ya I ( number 1 se start karna pdega cuz MSB me less and less magnitude chhaiye)
-                    par jab I aaye to stack empty bhi karna hoga kyunki ho sakta h I ke baad phir se D ka sequence aane lage in whic case we might require opposite ordering from R to L. Therefore stack as LIFO
+                    par jab I aaye to stack empty bhi karna hoga kyunki ho sakta h I ke baad phir se D ka sequence aane lage in which case we might require opposite ordering from R to L. Therefore stack as LIFO
    Caution...Edge case --> only 'i' or only 'd' as string imagine krke dekho
 
-18) Min Stack - min in O(1) time......apart from normal stack (kyunki baki functions abhi bhi btana h and that too in O(1) time), 1more stack to store just mins .........EASY
-19) Min Stack - min in O(1) time and O(1) space.....NOT STRAIGHTFORWARD....problem 18 me hum sare min values yaad rakh rhe they in a stack....abhi O(1) space me problem (problem is..O(1) time me min btana h) solve karna h matlab stack nhi use kar sakte...stack nhi use karna h aur sare previous min values bhi yaad rakhne h par kaise...min to har incoming element k sath change nhi hoga...to kyun nahin 
+- when I is encountered tab jo krna hota h that is even done outside the loop when all the characters have been read
+
+18) Min Stack - min in O(1) time......apart from normal stack (kyunki baki functions abhi bhi btana h and that too in O(1) time), 1 more stack to store just mins .........EASY
+
+19) VVV Imp - Min Stack - min in O(1) time and O(1) space.....NOT STRAIGHTFORWARD....problem 18 me hum sare min values yaad rakh rhe they in a stack....abhi O(1) space me problem (problem is..O(1) time me min btana h) solve karna h matlab stack nhi use kar sakte...stack nhi use karna h aur sare previous min values bhi yaad rakhne h par kaise...min to har incoming element k sath change nhi hoga...to kyun nahin 
        
       - use a variable 'min' instead of stack                                        
       - just remember the points of changes in min value. How?
       - instead of incoming element (V) instead of V we always store (V + (V-M)) in stack when V is < M(current min)
       - how we will be able to identify that at which places we have not actually stored V ,......for such places element in stack will be < M else not
-      - Caution: V ke jagah V + (negative no) store kar rhe to overflow ka issue aa sakta h. Thus have to use long type and it's wrapper class Long........       .intValue() to convert Long to int.....leetcode 155
+      - jb ye pop krne ki bari aayi to hum stack se to pop kr denge pr usse (V) pehle min kya tha (M) wo pta kaise chlega
+           tos = 2V - M (tos: top of stack)
+           => M = 2V - tos 
+           .....aur humne to V min me store krlia tha so..
+           => M = 2min - tos
+           => new min = 2 * old min - tos
+
+      - Caution: V ke jagah 2V + (negative no) store kar rhe to overflow ka issue aa sakta h. Thus have to use long type and it's wrapper class Long........       .intValue() to convert Long to int.....leetcode 155
 
 20) Two stacks in same array.....tos1 = -1, tos2 = n initially
 
 
-Linked List ( TODO: Go through Level up first then Foundation and then edit this .txt file...with exactly what needs to be remembered from LL in 1 place...do not segregate into Foundation LL and Level Up LL)
+Linked List (Foundation 1 + Level Up 2)
 --------------
 Advantage : to access non-contiguous locations in fragmented memory LL was introduced. Being able to access such locations is the advantage of LL
 Disadvantage over array : i) extra memory required to store address................ ii) to get to any node have to travel through other nodes
@@ -152,35 +204,171 @@ addLast()...........O(1)
 
 
 most common edge case ---> to be solved even before starting logic of problem........what if 0 child , what if 1 child
+whether it is needed or not always use the below case
+if(head ==null || head.next == null) return head;
+
+Always dry run a LL problem before submitting for below cases
+1) 0 length
+2) 1 length
+3) 2 length
+4) odd length
+5) even length
+
+always use curr to iterate .....ListNode curr = head;
+
+
 
 1)mid of LL....slow, fast pointer
    -- when even number of nodes and 
-         - we want left node as mid.......stopping condition of loop.....fast.next != null && fast.next.next != null
-         - we want right node as mid.......stopping condition of loop.....fast != null && fast.next != null      
+         - we want left node as mid.......stopping condition of loop.....fast.next != null && fast.next.next != null....preferred condition for breaking LL at mid
+         - we want right node as mid.......stopping condition of loop.....fast != null && fast.next != null     .....also works for odd number of nodes 
          - return slow
          - Try not to blindly memorise this....draw and code
+   -- when odd number of nodes (Note: condition same as even number of nodes and when we want right node as mid)
+         - fast != null && fast.next != null
 
 2) Kth node from end of LL.....size() directly ya indirectly (khud se size implement nhi kr skte) use nhi kar sakte
     - create initial separation of k then move the pointers with same speed.....near, far pointer.....far ko null tak nhi pahunchne dena h (have to keep within LL).....therefor have to use far != tail.....cuz tail ka next null hota h
-3) Merge two sorted LL
+    - challenge was to do this in 1 pass
+3) Merge two sorted LL....remember T.C = O(m+n) not O(min(m, n))
     - compare and put in "res LL".....O(n) space
-    - O(1) space (No extra space) solution in Level Up
-4) Odd Even LL 
+    - O(1) space (No extra space) solution in Level Up 2
+        - ListNode dummy = new ListNode(-1);
+        - ListNode prev = dummy
+        - eventually ListNode head = dummy.next and dummy.next = null
+        - 'dummy node' is used so that the same general code can be applied to every node including head. Also it helps in reducing NPE when we need to maintain prev. Also we don't have to worry about what will be the head of the result LL, it'll always be dummy.next
+4) Merge K sorted Lists....Level Up 2
+   - Approach 1: pick 2, merge and so on .... T.C: O(Nk) ....N=lk = total no of nodes in k LLs
+   - Approach 2: connect LLs, sort list...O(NlogN)
+   - Approach 3: Recursion (Divide and conquer)...break at mid...mergeTwoLists(recursive call1, recursive call 2).....O(Nlogk) // remember TC
+   - Approach 4: using PQ  O(Nlog k)....also in HM and Heaps notes (Foundation 2)
+5) Odd Even LL/ segregate 0,1/ segregate 0,1,2
     - collect odd nodes in a separate LL and even in separate LL then combine them.......also handle if all odd in input ....or all even in input.....O(n) space solution
-    - O(1) space (No extra space) solution in Level Up
-5) Reverse LL (Pointer Recursive)
-6) Intersection Point of 2 LL.......using map is not allowed......like "Kth node from the end of LL" problem, we'll have to create initial separation of diff in LL size in the larger LL
-7) Reverse nodes in group of K in LL  or K reverse in LL....O(1) no extra space solution in Level Up (In Lvel Up new object of LL is not created)
-8) Reverse a LL (data iterative)...Imp
-9) Reverse a LL (data recursive)...Imp
-10) Is LL a palindrome....using recusrion like problem 9
-11) Fold a LL
-12) Add 2 LL.....Very Imp....DIY without seeing solution
+    - O(1) space (No extra space) solution in Level Up 2
+        - ListNode evenDummy = new ListNode(-1);        ListNode oddDummy = new ListNode(-1); 
+        - ListNode evenPrev = evenDummy;                ListNode oddPrev = oddDummy;       
+
+we swap nodes when it is array and not LL problem
+In segregate 0, 1, 2
+   - return zeroDummy.next but before that
+   - don't do
+       - prevZero.next = oneDummy.next then prevOne.next = twoDummy.next then prevTwo.next = null
+   - do
+       - prevOne.next = twoDummy.next then prevZero.next = oneDummy.next then prevTwo.next = null
+   - so that we get the correct ans for when LL is only 2s   2-> 2-> 2-> 2-> 2
+
+whenever we have to collect nodes, we use 'dummy' node
+
+6) Reverse LL (Pointer Recursive)
+7) Intersection Point of 2 LL.......using map is not allowed......
+   - Approach 1: like "Kth node from the end of LL" problem, we'll have to create initial separation of diff in LL size in the larger LL
+   - Approach 2 (useless...would take more time to code): attach tail of 1 LL to head of another then find starting node of cycle (Level Up 2)
+8) Imp problem....Reverse nodes in group of K in LL  or K reverse in LL
+    - Approach 1: create a LL to store reversed k nodes...O(n) space
+    - Approach 2 (Level Up 2): O(1) space
+         - maintain pointers: oh, ot, th, tt (o: original, t: temporary)
+         - use curr.next = null and addFirst(curr, th, tt) to reverse k nodes
+         - don't use custom reverse() cuz it changes head and tail
+
+removeFirst(), addLast() --> queue
+removeFirst(), addFirst() --> stack (for reversing order)
+
+reverse linked list 2 leetcode 92....solve this too using oh, ot, th, tt pointers
+
+9) Reverse a LL (data iterative)...Imp
+10) Reverse a LL (data recursive)...Imp
+11) Is LL a palindrome....using recursion like problem 9
+    - recursive solution requires extra stack space
+    - Moreover we should not solve LL question using recursion cuz stack size has a limit and max possible length of LL == total RAM available
+    - for the same reason that array size has limit, we should not reduce LL problems to array problems (max possible length of an array = 2^31 - 1 as index of array is an integer  
+    - if we have to do in O(1) space
+        - break the LL in mid
+        - reverse 2nd half of LL 
+        - iterate over both halves and compare node by node
+        - remember: after finding and restoring LL to as original is crucial
+12) Fold a LL
+- recursive solution in Foundation 1 but should avoid recursion for LL problems 
+   - floor as param to know recursion depth....and then 2 conditions... 1) floor> LL size/2      2) floor == LL size/2
+- break at mid
+- reverse 2nd half
+- some more logic
 
 
+Tip: don't avoid using more pointers, functions in a LL problem
+
+13) Unfold a LL(Level Up 2)
+- in 1 pass of original LL make 2 sub LLs (sub LLs are not formed by dividing the original LL at mid; draw to find out how are the sub LLs should be formed)
+- reverse the 2nd LL
+- join at the end of 1st LL
+
+- in fold we break at mid; but in unfold we don't break at mid
+
+14) Add 2 LL.....Very Imp....DIY without seeing solution
+    - Approach 1: using recursion and place value
+    - Approach 2: using reverse() and dummy, prev to collect nodes of result
+    - should usually avoid using recursion and reducing to array for a LL problem 
+    - Practice Subtract 2 LL (Level Up 2)p....DIY without seeing solution
+
+15) Multiply 2 LL (Level Up 2)....remember T.C: O(n*m) where n, m are length of the LLs.....multiply k LLs has  T.C. = O(N^2) for large k....N=kl=total number of nodes in k LLs
+    - handling the addition of partial products is the most important
+    - when two partial products are added no need to create new nodes for result instead modify nodes of old partial product
+
+16) Quicksort LL (Level Up 2) ....If you can solve this w/o looking it up...you are in very good position
+    - segregateOnPivotIndex() should return a list of 3 things...head of small, pivotNode, head of large
+    - QS(), mergeSortedSubLists() should return list of {head, tail} so that merging of smaller subLLs can be easier
+
+
+quicksort LL and multiply 2 LL are very good problems of LL
+
+
+advantage of DLL over SLL: functions like addBeforeNode() is O(1) in DLL since we have prev, unlike SLL
+
+17) LRU cache - easy but popular
+   - Requirement: get(any), put() in O(1) in addition to LRU functionality
+       - Candidates for get(), put() in O(1)
+            - potential: stack, queue, HM (amortized O(1) and not actual O(1))
+            - rejected: PQ, tree, graph, 
+                        array (put() not in O(1) due to shifting of array), 
+                        LL(get() not in O(1) unless we have node address and it's DLL i.e we've reference to prev node as well)
+       - Candidates for LRU functionality (i.e maintain some sort of order)
+            - potential: stack, queue, PQ(order not maintained but LRU can be fetched in O(1)), array, LL
+            - rejected: HM, tree, graph
+             
+   - DS reqd: HM/Array + DLL (Java's LinkedHashMap is the same but it would make things too easy)
+            - HM/Array to store the node addresses against the key to make get() possible in O(1)
+            - HM is amortized O(1); array is pure O(1)
+            - put() in array can be O(1) if instead of adding new node at a index we just update the value of the preexisting node if any
+   - Whenever a node is touched even if it is just for get(), call makeRecent(node)
+
+18) Copy List with Random pointers - Imp for interviews
+    - Approach 1 (O(n) space) - HM <oldNode, newNode>
+       - in 1st pass LL is cloned excluding random pointers
+       - in 2nd pass random pointers are mimicked
+    - Approach 2 (O(1) space - w/o using HM)... Imp
+       - 1) zip new copied nodes with original nodes
+       - 2) copy random pointers for copied new nodes
+       - 3) unzip copied new nodes from original nodes
+
+19) is cycle present in LL ?
+- If slow and fast pointers meet after starting from the same node → cycle is present
+- If they start from different nodes, they may still meet in an acyclic list (if speeds differ)
+- So, pointer meeting alone isn’t conclusive — they must start from the same node to detect a cycle reliably
+
+20) starting point of cycle in a LL (looks like un-intuitive but isn't)
+   - find meeting point of slow and fast pointers with speed 1, 2 respectively
+   - take two new pointers - one at head of LL, another at meeting point
+   - now move the two pointers with same speed
+   - wherever they meet is the ans node
+   - Note: if we take any other speed other than 1, 2 to find the meeting point - this algo to find the starting point will not work
+21) Find if cyclic LL has seq part too or not 
+   - if SP = MP => no
+22) Find cycle length
+   - distance from head of LL to meeting point (for both completely cyclic LL and for hybrid LL)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Foundation 2
 ----------------
-
+ 
 Generic Trees
 ------------------
 not two child like Binary Tree but has..... ArrayList<Node> children
@@ -189,32 +377,41 @@ not two child like Binary Tree but has..... ArrayList<Node> children
         - input me -1 dikha matlab we've got all info about a node ( ==> we now know about all the children of a particular node).....so that node should be popped out of stack (stack contains all the nodes about whom we do not have all the information i.e nodes whose all children are not known yet)
         - aur agar -1 k alawa kuch aur dikha to? ....to push to karna hi h stack me par tree bnate hue chalna h....i.e mai kiska baccha hu uske children[] me khudko add kar lena h before pushing in stack.............mai kiska baccha hu ye kaise pta chalega? mere se just pehle jo stack me hoga wo hoga mera baap ...kyu? cuz we are give preorder traversal of a GT ..which is N then L child then R child 
 2) Height of GT.....max among height of all child + 1.......when we are talking in terms of edges(which is default) return -1 in base case or initialise with -1
-3)Level Order Traversal of GT.....queue to be used....RPA....remove, print, add
-4) Level Order - linewise  ( each level in new line) 
+    - if in terms of nodes then return 0 in base case or initialise with 0
+3) Level Order Traversal of GT.....queue to be used....RPA....remove, print, add
+4) Level Order - linewise  (each level in new line) 
     i) Solution1 ......2 queues....1 queue for current level, 2nd queue for nextLevel ....when mainQ is finished transfer the reference of childQ in mainQ
     ii) Solution 2.......null marker after every child of all the members of current level are pushed.....iski implemetation error prone h
-    iii) Solution 3.......most used.....remove from queue till levelSize becomes 0 then newline then ove to next level
+    iii) Solution 3.......most used.....remove from queue till levelSize becomes 0 then newline then move to next level
     iv) Solution 4........store each child with its level....when the popped level is greater than the ongoing level we come to know that we have now entered next level
 5) Level Order - Zigzag
-    i) Solution 1....2 stacks + level variable
+    i) Solution 1....2 stacks (1 stack for current level, 2nd stack for nextLevel) + level variable (to find the direction in which we should iterate and push elements of children[] in childStack)
     ii) Solution 2.....1 stack + 1 queue + level variable
+        - use LinkedList for both stack and queue
 
     matlab to bas 1 stack se hi h jisse order reverse ho jaye
-
 6) Remove leaves in a GT
       - should remove from arraylist always from Right
       - ask first isLeaf()? to each node...if yes then remove it..................only then call the recursive function on each child
         Caution: can't call recursive call first on each child then ask each node that isLeaf()...........cuz in that case removing of child leaves might make parent a leaf which will get removed as now it has also become leaf and so on  the tree will become empty 
 7) Linearize a GT...........DIY
-     - breaks links of children last .....cuz removal from last of arrayList does not create any problem
-     - Caution....Imp...have to run the loop for node.children.size() > 1 and not node.children.size() != 1  ...............  cuz we have run the loop for nodes with non-zero number of children and until the count becomes one....but node.children.size() != 1 allows the loop to be run even for leaf nodes which have 0 children
+     - breaks links of children from last .....cuz removal from last of arrayList does not create any problem
+     - Caution....Imp...have to run the loop for node.children.size() > 1 and not node.children.size() != 1  ...............  cuz we have to run the loop for nodes with non-zero number of children and until the count becomes one....but node.children.size() != 1 allows the loop to be run even for leaf nodes which have 0 children
 
-     - if faith is child ko linearise krke tail bhi bta  de then it would be an efficient approcah....as 1 loop will not be wasted in finding tail
-8) Distance between nodes.....DIY..............note required nodeToRoot() required........(rootToNode() might also work....need to verify though)
-9) Are GTs mirror in shape(not datawise)? ........DIY
-10) Is GT symmetric /foldable?
+     - if faith is child ko linearise krke tail bhi bta de then it would be an efficient approach....as 1 loop will not be wasted in finding tail
+8) Flatten BT to LL
+   - Approach 1: recursive.... just like lineraize a GT (S.C. - O(n) recursion stack space)
+   - Approach 2 (IMP): iterative (without using explicit stack)....O(1) space........DIY
+9) LCA of 2 nodes
+   - compute nodeToRootPath() for each node....then compare the paths from end of arraylist (from root) for 1st different node
+10) Distance between nodes.....DIY..............note required nodeToRoot() required........(rootToNode() might also work....need to verify though)
+   - distance != node1 to root to node2
+     distance == node1 to LCA to node2
+11) Are GTs mirror in shape(not datawise)?........DIY
+   - Understand how it is different from ...Are trees similar in shape? (not datawise)
+12) Is GT symmetric /foldable?
     - In other words, they are asking ..... is the given GT mirror image of itself?
-11) Predecessor and Successor of given node in preorder traversal............Very Imp
+13) Predecessor and Successor of given node in preorder traversal............Very Imp
     - have to find out both pre and succ in 1 pass itself
     - have to maintain a variable 'state'
     - next call krne se pehle predecessor ko update karna h........Note: ek child se dusre child k taraf jate waqt predecessor ko nhi update karna h.........predecessor to be updated in "Node Pre" not in "Edge Pre"
@@ -222,33 +419,33 @@ not two child like Binary Tree but has..... ArrayList<Node> children
     - state 1 to state 2 --> aur ek baar successor mil jaye to 'successor' ko bhi update nhi karna h in further traversals ..........Note: this is in addition to "predecessor ko bhi nhi update karna h" 
 
     - Caution: agar tree me data ho hi nhi to we might end up informing wrong predecessor....Edge Case.....han par successor me kuch galat nhi hoga....kyunki successor update hi nhi ho paya hoga
-12) Ceil --> smallest among larger
-      Floor --> largest among smaller
-13) Diameter of GT....Imp
+14) Ceil --> smallest among larger
+    Floor --> largest among smaller
+
+- We should initialise static variables just before using them cuz some other functions might also have changed them
+- although we can declare them globally as instance variables
+15) Diameter of GT....Very Imp
      - koi bhi node se 2 chiz return krwao...diameter across that node, height of that node
      - height of that node is required to calculate diameter across its parent
      - kyunki diameter of a tree represented by say root....can be across root or can be within any of its subtree
      - Refer Level Up 3 ....Diameter Set
 
-     TODO for future:  attach xerox of Level Up 3 version in  Foundation 2 notes
-
-14) Kth largest......Very Imp.....DIY
+16) Kth largest......Very Imp.....DIY  
      - equals floor of (K-1) th largest
      - 1st largest == floor of 0 th largest == Infinity
-15) Node with maximum subtree sum ( there can be negative numbers as well stored in the tree)
 
-16) Iterative preorder and postorder traversal ( this trick can also be used for inorder) (this trick can also be used for BTs) 
+17) Iterative preorder and postorder traversal (external stack + state variable) ( this trick can also be used for inorder) (this trick can also be used for BTs) 
       - 'state' variable used
-      - stack has <- - elements which have not been explored completely yet
+      - stack has <--- elements which have not been explored completely yet
       - state = -1 (i.e if we found state = -1 in tos) => call to 0th child has not been made => pre area ....increment state to 0 so that 0th child can be called in next iteration
       - state = n ( n == number of children of the node in tos) ==> all the children have been explored => post area => time to pop
-      - state = x in between [1, n-1] ==> call xth child in next iteration.....increment state to (x+1) so that (x+1) th child can be called in next iteration
+      - state = x in between [1, n-1] ==> call to (x+1)th child has not been made yet.....increment state to (x+1) so that (x+1) th child can be called in next iteration
 
-17) Iterable and Iterator interfaces
+18) Iterable and Iterator interfaces
      - both are interfaces
      - class which implements Iterable has to implement Iterator<Integer> iterator() function... the implementation should contain an object of a class which has implemented Iterator interface
      - class which implements Iterator has to implement hasNext() and next()
-
+  
 
 Binary Trees
 ----------------
@@ -259,7 +456,7 @@ GT me for(Node child: node.children) se null handle ho jata h....BT me null ke l
 Whenever we want more than 1 information from any node we have 2 options.....i) club the multiple information into a class and return that from every node or ii) return the info which is required to calculate the answer for parent and keep other info as static variables which can be changed by every node
 
 1) Construct BT from given input
-    - for GT we have arraylist of children which is dynamic, so while processing input for GT we just need to know when the children list of a particular node has ended. That's why '-1' marker in input
+    - for GT we have arraylist of children which is dynamic, so while processing input for GT we just need to know when the children list of a particular node has ended. That's why '-1' marker in input    
     - But for BT we do not have a list. Instead we have 2 nodes reference holders - L child and R child. So while processing input we need to know whether the node we are considering is the L child or the R child of the parent node
     - So in the input for constructing BT we use null for a non-existent child (it can be L or R child....if it is both then we use "null null" in input)...we'll always expect the first entry to be L child and next entry to be R child
 
@@ -267,7 +464,7 @@ Whenever we want more than 1 information from any node we have 2 options.....i) 
     - state = 1 => next i/p is the L child of the node on tos(top of stack)
     - state = 2 => R child
     - state > 2 => both child of current node have already been plugged. Therefore time to pop the current node out of stack
-
+ 
 2) Height of a BT.......when we are talking in terms of edges(which is default) return -1 in base case......height of leaf = 0 => height of null = -1
 3) Iterative Pre, In, Post order traversal in BT (Note: Iterative not recursive)
     - on lines of iterative preorder, postorder traversal in a GT but not exactly same
@@ -482,7 +679,309 @@ Heap
 
 
 
+Time and Space (Sorting)
+-------------------------
+1) Bubble sort....O(n^2) in best and worst
+  - total n-1 passes of complete array
+  - in each pass, next biggest element assumes its correct position in the right side (sorted array starts forming from right)
+  - so in each pass, j can only take n-pass values (j = 0 to n-pass-1)
 
+2) Selection sort....O(n^2) in best and worst
+  - i: index for which we want correct element
+    m: index of min found so far in the pass
+    j: index to be compared with m (in search of min in unsorted portion)
+
+  - at the end of each pass m, i elements are swapped
+  - sorted array starts forming from left 
+
+  - selection sort < bubble sort (number of swaps)
+ 
+3) Insertion sort....O(n) in best, O(n^2) in worst
+  - At the start of the program, 1st cell of array is assumed sorted
+  - i: 1st element of unsorted portion on right (to be included in sorted portion on left)
+  - if element at i is smaller than the last element of the sorted portion, swap
+  - then continue compairing from the right to left to ensure proper sorted order in the sorted portion
+  - Optimisation (optional): stop compairing when ( . < .)
+
+4) Mergesort....TC: O(nlogn); SC: O(n)
+-
+ mid = lo + (hi-lo)/2 => divisions: [lo, mid], [mid+1, hi]
+ mid = hi + (lo-hi)/2 => divisions: [lo, mid-1], [mid , hi]
+
+- stable sorting algo - the relative order of equal elements is preserved after sorting
+
+Example:
+Input:
+[(4, 'a'), (3, 'x'), (4, 'b'), (1, 'y')]
+Sorted by first number (Merge Sort):
+[(1, 'y'), (3, 'x'), (4, 'a'), (4, 'b')]  -->  'a' stays before 'b'
+
+
+- main call and recursive call  both should return an array
+- method signature should have 3 things - arr[], lo, hi
+
+int[] mergeSort(int[] arr, int lo, int hi) {
+
+    //base case
+
+    int mid = ....
+
+    int[] fsh = mergeSort(arr, lo, mid);
+    int[] ssh = mergeSort(arr, mid+1, hi);
+    
+    return mergeTwoSortedArrays(fsh, ssh);
+}
+
+5) Partition an array.....T.C: O(n)
+ - Initially we have --> (unknown)
+ - In any intermediate stage we have --> (smaller or equal to the pivotValue) then (larger) then (unknown)
+ - say larger starts from i and unknown starts from j index
+ - We've to decide at each stage --> in which region (smaller or larger) the 1st element of unknown should be shifted
+
+ - int partition(int[] arr, int pivotValue, int lo, int hi) --> return pivotIndex after partitioning i.e (i-1)
+
+6) Quicksort
+ - inplace algo (no new space is created)
+ - T.C: avg: O(nlogn), worst: O(n^2) (when already sorted)
+ - method signature should have 3 things - arr[], lo, hi
+
+ void quickSort(int[] arr, int lo, int hi) {
+   
+    // base case
+
+    int pivot = arr[hi];
+    int pi = partition(arr, pivot, lo, hi);
+
+    quickSort(arr, lo, pi-1);
+    quickSort(arr, pi+1, hi);
+    
+}
+
+ - last element is chosen pivot so that it is swapped last thus making it the last element in the smaller region so that we can achieve  
+   ((smaller elements) pivotElement) (larger region)
+
+7) find kth smallest element in an array (might not be sorted)
+  - QuickSelect: T.C: avg - O(n), worst - O(n^2) (Most optimal solution)
+  - mostly similar to QuickSort
+  - Diff: 
+       - we make only 1 recursive call of quickSort() depending on whether (k-1) > pivotIndex or <
+       - if == then we return pivotValue (i.e arr[hi])
+  
+Algorithm        | Average Case Equation              | Avg. Complexity         | Worst Case Equation           | Worst Complexity
+------------------------------------------------------------------------------------------------------------------------------------------------------
+Quicksort        | T(n) = 2T(n/2) + O(n)              | O(n log n)              | T(n) = T(n-1) + O(n)          | O(n^2)
+Quickselect      | T(n) = T(n/2) + O(n)               | O(n)                    | T(n) = T(n-1) + O(n)          | O(n^2)
+
+
+8) Count Sort...T.C: O(n+range) == O(n) if range <<< n
+ - stable algo
+ - can be used when limited and known range
+ - Ex: cannot be applied when min = 1, max = 100000
+ - Ex: scores of thousands of students where score can only be in between [0-100]
+
+ - Algo
+     - Find min = 3, max = 9, range = 9-3 = 6, size = range + 1 = 7
+     - Make frequencyArray
+     - Modify frequencyArray to store prefix sum
+     - loop through the original array from L <--- R and 
+          - place arr[i] in prefixSumArray[arr[i] - min] - 1 (cuz 0 based indexing)
+          - prefixSumArray[arr[i] - min]--
+
+9) Radix Sort
+ - for lexicographical sorting
+ - from LSB to MSB
+ - uses count sort (stable algo)
+ - Ex: 267, 358, 294 --> 294, 267, 358 --> 358, 267, 294 --> 267, 294, 358
+
+ - Algo
+   - apply countsort N no of times where N = number of digits in max in array
+       - find max in array
+       - 
+         int exp =1;
+         while (exp <= max) { // loop will run for <= 10 times as max integer in java is of 10 digits
+            countSort (arr, exp);
+            exp = exp * 10;
+         }
+     
+    - prefixSumArray[arr[i] - min] in radix sort becomes --> prefixSumArray[arr[i]/exp % 10]
+    - arr[i]/exp % 10 basically gives digit in exp th place
+
+10) Sort Dates (DD-MM-YYYY) all dates fro year 0 to 2500
+   - DD << MM << YYYY (significance)
+   - countSort(arr, dev, mod, range)
+   - 
+       sortDates(arr) {
+          countSort(arr, 1000000, 100, 32); // DD
+          countSort(arr, 10000, 100, 13); // MM
+          countSort(arr, 1, 10000, 2501); // YYYY
+       }
+
+11) sort 0, 1......in O(n) 1 pass.....use partitioning
+   - Initially we have --> (unknown)
+   - In any intermediate stage we have --> (0s) then (1s) then (unknown)
+   - say 1s starts from i and unknown starts from j index
+   - We've to decide at each stage --> in which region (0s or 1s) the 1st element of unknown should be shifted
+   - loop condition: j < arr.length
+
+12) sort 0, 1, 2
+   - Initially we have --> (unknown)
+   - In any intermediate stage we have --> (0s) then (1s) then (unknown) then (2s)
+   - say 1s starts from i and unknown starts from j, 2s starts from k index
+   - We've to decide at each stage --> in which region (0s or 1s or 2s) the 1st element of unknown should be shifted
+   - loop condition: j < k
+   - Initially 
+        i=0, j=0 (0, 1 grows ---->)
+        k = arr.length (2 grows  <----)
+
+13) Target Sum Pair
+   - Req: If ans is {(a,b), (c, d} then a<c, a<b, c<d
+   - Approach
+       - Arrays.sort(arr);
+       - two pointers at opposite ends
+
+14) leetcde 33 - Search Element in Rotated Sorted Array - I (array has distinct elements) (Take You Forward - Youtube)
+   - binary search application
+   - identify which half is sorted
+        - if(arr[lo] <= arr[mid]) => left half (from lo to mid) is sorted
+        - if(arr[mid] <= arr[hi]) => right half (from mid to hi) is sorted
+   - check if the target lies in the sorted half and eliminate half of the array accordingly
+
+
+            // Check if left half is sorted
+            if (nums[left] <= nums[mid]) {
+                if (target >= nums[left] && target < nums[mid]) {
+                    right = mid - 1; // search left half
+                } else {
+                    left = mid + 1; // search right half
+                }
+            }
+            // Otherwise, right half is sorted
+            else {
+                if (target > nums[mid] && target <= nums[right]) {
+                    left = mid + 1; // search right half
+                } else {
+                    right = mid - 1; // search left half
+                }
+            }
+
+15) leetcode 81 - Search Element in Rotated Sorted Array - II (array can have duplicates) (Take You Forward - Youtube)
+   - When elements at low, mid, hi all are same ---> we can't find which half is sorted
+     Ex: 3 1 2 3 3 3 3.....lo = 0, hi = 6, mid = 3.....arr[lo] == arr[mid] == arr[hi] == 3
+   - In such a case, trim down the search space if arr[mid] != target ---> li++ and hi-- 
+
+
+   -  while (lo <= hi) {  // low < hi se wrong ans aata h
+
+         int mid = 
+         if (arr[mid] == target) 
+            return true;
+
+         // if flow comes here => arr[mid] != target
+         if( arr[lo] == arr[mid] && arr[mid] == arr[hi]) {
+            li++;
+            hi--;
+            continue; // easy to miss
+         }
+
+         // rest of the code same as leetcode 33
+  
+      } 
+
+    - T.C: avg: O(log n)
+           worst: O(n).....li++, hi-- might lead to exploring almost all the array...when the array has a lot of duplicates ..... 3 3 3 3 1 3 3 3 3
+
+16) leetcode 153 - pivot/min in rotated sorted array
+
+public int findMin(int[] arr) {
+  int lo = 0;
+  int hi = arr.length - 1;
+
+  int min = (int) 1e9;
+  while (lo <= hi) {
+    int mid = lo + (hi - lo) / 2;
+
+    if (arr[lo] <= arr[hi]) { // not necessary; is just optimisation // when both halves are sorted
+
+      // return arr[lo]; // wrong
+
+      min = Math.min(min, arr[lo]);
+      break; // note: in problem 15 it was continue
+    }
+
+    if (arr[lo] <= arr[mid]) {
+      min = Math.min(min, arr[lo]);
+      lo = mid + 1; // exclude all other elements from left half from search space
+    }
+    if (arr[mid] <= arr[hi]) {
+      min = Math.min(min, arr[mid]);
+      hi = mid - 1; // exclude all other elements from right half from search space
+    }
+  }
+
+  return min;
+}
+
+
+17) leetcode 154 - pivot/min in rotated sorted array 2
+- like 153 and
+- shrink space when arr[lo] == arr[mid] == arr[hi]
+
+class Solution {
+  public int findMin(int[] arr) {
+    int lo = 0;
+    int hi = arr.length - 1;
+
+    int min = Integer.MAX_VALUE;
+    while (lo <= hi) {
+      int mid = lo + (hi - lo) / 2;
+
+      //   if (arr[lo] <= arr[hi]) { //Caution: wrong
+
+      if (arr[lo] < arr[hi]) { // not necessary; is just optimisation  // when both halves are sorted
+
+        // return arr[lo]; // wrong
+
+        min = Math.min(min, arr[lo]);
+        break;
+      }
+
+      // both halves sorted
+      if (arr[lo] == arr[mid] && arr[mid] == arr[hi]) {
+        lo++;
+        hi--;
+        min = Math.min(min, arr[mid]); // easy to miss
+        continue;
+      }
+
+      // left half sorted
+      if (arr[lo] <= arr[mid]) {
+        min = Math.min(min, arr[lo]);
+        lo = mid + 1;
+      }
+
+      // right half sorted
+      if (arr[mid] <= arr[hi]) {
+        min = Math.min(min, arr[mid]);
+        hi = mid - 1;
+      }
+    }
+
+    return min;
+  }
+}
+
+18) how many times rotation 
+ - just return index of min/pivot
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Level Up 1
+------------
+
+
+
+
+
+ 
 continue studying from.........
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)

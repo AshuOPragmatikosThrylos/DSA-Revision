@@ -430,11 +430,13 @@ not two child like Binary Tree but has..... ArrayList<Node> children
      - kyunki diameter of a tree represented by say root....can be across root or can be within any of its subtree
      - Refer Level Up 3 ....Diameter Set
 
+     - or keep diameter static; calculate_Dia_Return_Height
+
 16) Kth largest......Very Imp.....DIY  
      - equals floor of (K-1) th largest
      - 1st largest == floor of 0 th largest == Infinity
 
-17) Iterative preorder and postorder traversal (external stack + state variable) ( this trick can also be used for inorder) (this trick can also be used for BTs) 
+17) Iterative preorder and postorder traversal (external stack + state variable) ( this trick can also be used for inorder) (this trick can also be used for BTs) .......DIY for both GT and BT
       - 'state' variable used
       - stack has <--- elements which have not been explored completely yet
       - state = -1 (i.e if we found state = -1 in tos) => call to 0th child has not been made => pre area ....increment state to 0 so that 0th child can be called in next iteration
@@ -466,10 +468,9 @@ Whenever we want more than 1 information from any node we have 2 options.....i) 
     - state > 2 => both child of current node have already been plugged. Therefore time to pop the current node out of stack
  
 2) Height of a BT.......when we are talking in terms of edges(which is default) return -1 in base case......height of leaf = 0 => height of null = -1
-3) Iterative Pre, In, Post order traversal in BT (Note: Iterative not recursive)
+3) Iterative Pre, In, Post order traversal in BT (Note: Iterative not recursive)..........DIY for both GT and BT
     - on lines of iterative preorder, postorder traversal in a GT but not exactly same
     - here we have to check if L/R child exists in input only then push it in stack
-    TODO: play around with slightly different approaches....Refer notes
 4) Print K distance away......very Imp.........DIY
     -  this k distance can be k directly below me or .......1 up then k-1 down or......2 up then k-2 down.....up up up kab tak? all the way to root.......So first we need to find nodeToRootPath
     - traverse on nodeToRootPath[] and call recursive function on each of the node in it
@@ -481,20 +482,51 @@ Whenever we want more than 1 information from any node we have 2 options.....i) 
                  
       Let's say we want to find 3 distance away from B.... 1 up to A then 2 down can be 1 way.... now when we go 2 down from A obviously we don't want to go towards B...cuz going 2 down from A towards B would be an equivalent of 1 down from B but we wanted 3 away from B
    - So we should mark B as 'blocker' node when we try to go down from A through initial recursive call.....when blocker node is encountered in our way down we should just return
+ 
+5) Print single child nodes
+6) remove leaves....remove leaf in pre area....if removed in post area all nodes will get removed
+7) is tree BST......very imp (is balance tree....similar ques......either club in class, array or (change static + return something else)   )
 
-5) Transform back from a left cloned tree .....DIY
-6) largest BST subtree
+
+    BSTPair isBST (Node node) {
+        if(node == null) {
+            BSTPair bp = new BSTPair();
+            bp.min = Integer.MAX_VALUE; // note
+            bp.max = Integer.MIN_VALUE;
+
+            bp.isBST = true;
+            return bp;
+        }
+
+        BSTPair lp = isBST(node.left);
+        BSTPair rp = isBST(node.right);
+
+        BSTPair mp = new BSTPair();
+        mp.isBST = lp.isBST && rp.isBST && (node.val >= lp.max && node.val <=rp.min);
+
+
+        if(!mp.isBST)
+           return mp; // cuz if not BST then no use of finding min, max
+
+        mp.min = Math.min(node.val, lp.min);
+
+        mp.max = Math.max(node.val, rp.max);
+
+        return mp;
+
+    }
+
+8) largest BST subtree
 
 
 Binary Search Trees
--------------------------
-Structure based algos like size(), sum(), height(), diameter(), display() are same in BT and BST
-But data based algos like max(), min(), find() are efficient in BST as compared to BT
-
-BST --> O(log n)
+-------------------------   
+BST --> O(log n) (if can keep of reducing search space as in - max(), min(), find()) 
 BT --> O(n)
 
 Inorder traversal of BST gives ascending order
+
+BST problems should always be done iteratively
 
 1) Construct BST from given input
    - sort the input array if not already sorted
@@ -507,20 +539,29 @@ Inorder traversal of BST gives ascending order
 
    - Recursive solution takes recursive space, iterative solution will take no extra space i.e it'll take O(1) space....That's why have attached iterative solution in Foundation 2 notes for add, delete in BST.....Iterative solution seems error prone...but try once w/o looking
    - BST problems should always be done iteratively.....Level Up 2...Tree....BST Set.....LCA in BST
-3) Replace with sum of larger.... Imp....DIY...in both ways....LNR and RNL as well
+
+3) Remove nodes from BST (Iterative)
+   - use dummy, prev/parent
+   - find the node with the given value (curr)
+   - move the right subtree of curr to the rightmost of curr's left subtree
+      - edge case: what if curr's left subtree is null
+      - remember the root of this left subtree (sub)
+   -  either do parent.left = sub or parent.right = sub depending on whether curr is the left or right child of parent respectively
+
+4) Replace with sum of larger.... Imp....DIY...in both ways....LNR and RNL as well
                         A
                      /      \
                     /        \
                    /          \
                   C            B
 
-    - For C --> A+ B is larger
+    - For C --> A + B is larger
       For A --> B is larger
-4) LCA  in a BST
+5) LCA  in a BST
     - LCA in a BT --> O(n) space + recursive space (nodeToRootPath[] required)
     - LCA in a BST --> O(1) space + recursive space
-5) Print in range
-6) 2 Sum BST....Very Imp....O(h) == O(log n) for a balanced BT
+6) Print in range
+7) 2 Sum BST....Very Imp....O(h) == O(log n) for a balanced BT
     - we want answer pairs in increasing order. Therefore inorder traversal of BST (Any node cannot be used as both the elements of the pair)
 
     - 3 approaches ............   Approach 1 has better S.C.  ................   Approach 2 has better T.C  ..........    Approach 3 --> best of both worlds...approach 1,2..........while talking about S.C. we are not including the recursive stack space required for solving the main problem, we are just talking about how much extra space is required
@@ -531,7 +572,7 @@ Inorder traversal of BST gives ascending order
     - Approach 3          T.C.: O(n),        S.C.: O(h) ..............Just like Approach 2 but we just avoided storing in arrayList.....next element on demand.....streaming
          - left pointer can be obtained by InorderBSTIterator, right pointer can be obtained by ReverseInorderBSTIterator......cannot use recursive stack for iterator, need manual stack ( a data structure created in heap which could maintain state till when iterator is called the next time) so that it can be controlled.....use 'state' variable to code iterative inorder traversal (Refer Generic Trees section of Foundation 2)
          - If we use morris traversal to code iterator then we can reduce the S.C. to O(1) .......... Level Up 2 - Tree - Traversal Set - leetcode 173 Binary Search Tree Iterator
-          
+
 
 HashMaps and Heaps
 ----------------------------

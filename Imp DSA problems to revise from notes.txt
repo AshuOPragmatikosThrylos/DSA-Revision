@@ -580,7 +580,7 @@ a particular data structure is unordered ==> the order of insertion is not the s
 
 Inbuilt HashMap functions --> getOrDefault(key, defaultValue), putIfAbsent()
 
-Heap 
+Heap
    - PriorityQueue<Integer>pq = new PriorityQueue<>(); // min heap
    - PriorityQueue<Integer>pq = new PriorityQueue<>(Collections.reverseOrder()); // max heap 
      Alternatively for max heap
@@ -589,77 +589,161 @@ Heap
           });
    - add(), remove() from heap --> O(log n)     peek() --> O(1)
 
-   - HeapSort (add 1 by 1 in heap then remove 1 by 1 to get sorted order) --> T.C.: O(nlog n)          S.C.: O(n) ... There is an inplace version too // TODO: write more about the inplace version
-    
+   - HeapSort (add 1 by 1 in heap then remove 1 by 1 to get sorted order) --> T.C.: O(nlog n)          S.C.: O(n) ... There is an inplace version too
+   - inplace i.e O(1) space version 
+       - we don't create a separate DS (heap)
+       - instead we maintain heap in given array
+       - recursive downHeapify   S.C: O(log n)
+       - iterative downHeapify   S.C: O(1)
+   
 1) k largest elements
    - Approach 1: using max heap.....O( (n+k) log n)
         - insert all elements in heap O(nlog n) time  then removal of k elements from heap in O(klog n) time
    - Approach 2: using min heap......O( (n+k) log k) .... better approach as k <= n
-        - at any point contains the <=k largest elements found yet.........so initially we push k elements in the heap in O(klog k) time....now when the (k+1) th element arrives and if it is bigger than the current min in the heap, since the heap can only contain <=k elements ...min has to be removed and then replaced with the incoming element..and since we are removing min, we can say heap will contain "largest" elements at any point of time....Similarly we have to push remaining elements in the heap.....so total time complexity of pushing n elements in a heap of size k will be O(n log k)
-        - now when all the elements are pushed in heap once...heap will contain the final k largest elements......the simulataneous removal of k largest elements from heap in O(klog k) time
+        - DS to store k largest should be what? we'll figure out later
+        - Algo: 
+            - create DS out of the first k elements (doesn't matter whether largest or not)
+            - If the incoming element is better(larger) than the weakest(smallest) of the group --> welcome! && kick out the weakest one from the DS
+        - How can we find the weakest one most efficiently? ---> min heap => DS should be min heap
+        - initial creation of heap of k size - O(klog k)
+        - if all of (n-k) elements lead to removal and addition - 2 * (n-k) * log k = O(nlog k)
+        - removing the k largest elements from the min heap 1 by 1 -    k * O(1) = O(k)  
+
 2) Sort k nearly sorted array ..... every element of the array is at max displaced k spots left or right to its position in the sorted array
    - Approach 1: sort the array in O(nlog n) time...Note we did not use the fact that "at max k displaced"
    - Approach 2: using min heap O(n log k)  .... There will be <= (k+1) elements in the heap at any point of time
         - In sorted array min most element will be at 0th index and since it cannot be displaced on left, (no space...no valid array index on left) it can only be displaced upto index (k+0) on the right....so if we consider (k+1) elements from index 0 to index k, we'll definitely get the min element ...so heap of size (k+1) is enough... once we remove an element from heap to get current min only then we should add any further element in the heap...since the number of element in the heap should not exceed (k+1) 
         - add first then remove from heap is also ok but that'll just increase heap size which is not really needed .... kyunki heap me agar zaroort se zyada elements hi rakhna hota to n element hi kyu nhi rakh liye
-3) Longest consecutive sequence of elements (like 5,6,7,8..... these can occur in any order and at any index which need necessarily be continuous indexes)   // TODO: think whether this should be in this list or is it too easy
-   - either need to check ki previous element h ki nhi or need to check ki next element h ki nhi in the given sequence ...this search needs to be in as in time as possible.... therefore store every element in HashMap
+
+3) Longest consecutive sequence of elements (like 5,6,7,8..... these can occur in any order and at any index which need not necessarily be continuous indexes)
+   - either need to check ki previous element h ki nhi or need to check ki next element h ki nhi in the given sequence ...this search needs to be in as min time as possible.... therefore store every element in HashMap
    - we also need to print the sequence itself at the end... so need to know the starting or ending point of the LConsecutiveSequence (along with the size of the sequence of course) ...... therefore also store a marker in hashmap corresponding to every element indicating whether it is the starting/ending element or not
    - Algo:
         - 1. for every element in hashmap which is a starting/ending point, check if prev/next element exists....if it does current element is not the starting/ending point....mark for current element accordingly
         - 2. now for every element in hashmap which is still a starting point (an actual one not an assumed one) ..... count how many elements are present in sequence and find the longest such sequence
 
 4) Implementation of PriorityQueue using heap .... Imp
-   - Most important part: 
-       i) with what parameters upHeapify(), downHeapify() are called for the first time
-      ii) understanding and implementation of upHeapify, downHeapify
+   - a BT is a heap if
+       -  it is a complete BT
+            - before h th level, (h-1) levels should be completely filled
+            - a node cannot have R child if it does not have a L child
+       - all nodes satisfy heaporder property which is -  root has highest priority among root and its child subtrees
+            - if L, R subtrees too satisfy heaporder property => L, R child subtrees too are heap among themselves
+
+   - heap not stored as BT but as arraylist  cuz
+       - if stored as BT adding a node will be (n) (cuz we'll have to do level order traversal)
+       - traversing child to parent is not easy in BT (for upHeapify)
+ 
    - add(), remove() ... O(log n) ..... why so? cuz we always maintain a complete (balanced) heap .... and add/remove operations on a balanced tree are O(log n) .. like AVL(balanced BST) ...cuz only for balanced tree height of tree , h = log n  (complete --> all of previous h-1 levels are completely filled, and all levels are strictly filled from L to R. In other words there can be no R child if any L child is skipped) (balanced --> difference between height of left,right child subtrees is not more than 1) (a complete tree is always a balanced tree)
    - peek() ...O(1)
-   - heap should be implemented using ArrayList and not using a BT (heap is not stored but visualised as a BT) cuz   
-        i)  since we have to maintain a complete tree therefore to find out where to add() we need to do levelOrderTraversal which is O(n)
-        ii) heap creation requires a upHeapify internal functionality which is movement from child to parent ...... which is not easy in a BT
-   - add () --> uses upHeapify/downHeapify()
-     remove() --> uses downHeapify
+
 
    - creation of heap (addition of n elements) can be done in 2 ways
-       - online data (data coming 1 by 1...in other words streaming) ...each intermediate stage is heap ....uses upHeapify in add() ......O(nlog n) for creation of heap
-       - complete data present initially .... first add all data in data structure then start doing downHeapify() from every node beginning with leaf nodes to make the data structure an actual heap ......O(n) for creation of heap
+       - when online data (data coming 1 by 1...in other words streaming)
+           - each intermediate stage is heap
+           - Algo
+                void add(int val) {
+                   data.add(val); // maintaining heap in arraylist named 'data'
+                   upHeapify(data.size() - 1);
+                }
 
+       - when complete data present initially
+           - Algo
+                 void createHeap (int[] arr) {
+                     for(int val: arr) {
+                       data.add(val);
+                     }
+                     // downHeapify(0); // i.e. downHeapify(root) .....this is wrong
+                     // for a BT to be heap left subtree and right subtree must be heap
+                     // so we need to start from below
+                     // as leaf nodes are already heap
+                     // so we need to ensure heap from 2nd last level from right hand side
+
+                     
+                     for(int i = data.size()/2; i>=0; i--) {
+                         downHeapify(i);
+                     }
+                 }
+               
+     
+
+   - add () --> 
+                - add to last of arrayList then upHeapify(idx) .... why to last ? so that operation can be done in O(1) .... here idx = last index when initial call was made
+                   - upHeapify(idx) recursively works on each node in the node to root path of the added node
+
+                - uses upHeapify
+                     - when online streaming data
+                     - when we use PQ provided by Java
+                     - creation of heap - T.C: O(nlog n)
+
+                - or uses downHeapify 
+                     - when all the data is initially available
+                     - when we create our custom heap
+                     - creation of heap - T.C: O(n)
+
+     remove() --> 
+                - uses downHeapify
+                - highest priority element is the only accessible element in the heap....so now when it needs to be removed, removing from beginning of arraylist will be O(n) due to shifting whereas removing from last of arrayList is O(1).
+                    - For this 0th and last leaf node are swapped. which arises the need for downHeapification beginning at 0th
+ 
    - both upHeapify and downHeapify converts a non-heap to heap .... only their direction of movement is different
 
-   - upHeapify (idx) - heapification might be required at parent too in addition to at idx (idx: current ....current ko parent se compare karna h isliye current paas kar rhe....subsequently pidx might become idx i.e upHeapify(idx) --> upHeapify(pidx)) 
-       - idx = wo index jisko uske parent se compare karna h
-       -  add() = add to last of arrayList then upHeapify(idx) .... why to last ? so that operation can be done in O(1) .... here idx = last index when initial call was made
-       -  let's talk about minHeap....everything on left, right child subtrees must be greater than root
-       -     A = 5
-           /       \
-         B=7     C = 3
+   - upHeapify (idx) - 
+       - 
+            void upHeapify(int idx) {
+
+              if(idx >= 1) {
+                 int pidx = (idx -1)/2; // up jana h - up to parent hi h
+
+                 if(data.get(pidx) > data.get(idx)) {
+                   swap(idx, pidx);
+                   upHeapify(pidx); // if this function was for idx and since it is "up"Heapify therefore recursive call will be for parent i.e pidx               
+                 }
+              }
+            }
+ 
+       - Why recursive?
+
+            2
+          /   \
+         5     7
+        / \   /
+       10  6  4   <-- new insertion: 4
+       
       
-         A is the parent of C not the root of heap
+      since 7 > 4 so 4, 7 will be swapped
+      2 was < 7 but whether it will be less than the even lesser than 7 i.e 4 or not is not a certainty
+      so we need to perform upHeapify even on the parent (pidx) and not just current node (idx)
 
-         let's say we have added at C (C is a leaf node) . If C > A then all is fine. Else if C <  A in this subtree, then C should be moved in place of A and A should be moved in place of C
-         if we replace 3 with 5 then everything is fine as descendants should anyways be greater
-         but initially everything below A was > 5, but now will those be > 3 when 3 is moved in place of A?? might not ..... so after swapping, subtree rooted at A  might need heapification ... i.e heapification might be needed at parent
-         so we moved from child to parent ...... upHeapify(idx) --> upHeapify(pidx) 
-         and so on we keep on moving up the tree ensuring everything below the checked node is a heap
 
-   - downHeapify (0)  - heapification might be required at child too i.e downHeapify(0) --> downHeapify(childIdx)
-       - remove() --> highest priority element is the only accessible element in the heap....so now when it needs to be removed, removing from beginning of arraylist will be O(n) due to shifting whereas removing from last of arrayList is O(1). 
-       - For this 0th and last leaf node are swapped. which arises the need for downHeapification beginning at 0th 
-         So after swapping , higher element is placed at 0th which might result in making the heap --> not heap ( parent might now no longer be the min among parent, left child, right child)
-         To resolve this, parent is swapped with min child which might again end up in making that child subtree "not heap"
-         and so on we keep on moving down the tree checking that all the way to below is a heap or not (Note: we are just comparing current node and its child for heap property....assuming ki child subtree to leap hoga hi...kyunki swap krne se pehle tak to sab kuch heap tha hi....isliye agar currentnode, L child, R child milke agar heap property satisfy krta h to we stop going down the tree)
+   - downHeapify()
+      - 
+         void downHeapify(int idx) {
+            int lcidx = 2 * idx + 1; // down jana h - down to child hi h
+            int rcidx = 2 * idx + 2;
 
-   - upHeapify requires moving from a node to its parent
-      - Formula for the same: pidx = (idx-1)/2
-   - downHeapify requires moving from node to child
-      - Formulae:
-         i)  lc = 2 * pidx + 1
-         ii) rc = 2 * pidx + 2
 
-   - Note: swapping k baad hi call hota h to upHeapify or downHeapify ... not talking about initial call.....talking about recursive call
+            int minidx = findMin(idx, lcidx, rcidx);
+            
+            if(minIdx != idx) { if parent/root is not the min
+               swap(idx, minIdx);
+               downHeapify(minIdx);
+            }
+         }
 
-5) Median Priority Queue ... instead of max/min the heap should return median (middle element) in current sorted array in O(1) time 
+       - Why recursive?
+
+            2                                      7 (A)                                                                       4
+          /   \                                  /   \                                                                       /   \
+         5     4   -- everything was > 2  ----> 5     4 (B) -- downHeapify(A) cuz everything might not be > 7 as 7 > 2 -->  5     7 ------> downHeapify(B) cuz everything might not be > 7
+        / \   /                                / \   /                                                                     / \   /
+       10  6  7                               10  6  2                                                                   10  6  2
+
+
+      and so on
+                    
+
+5) Median Priority Queue ... instead of max/min the heap should return median (middle element) in current sorted array in O(1) time
    - PQ can only be min/max heap....we have to somehow adapt MPQ from a PQ
    - Internally MPQ for user = PQ1(max) + PQ2(min) ..... if MPQ = 10, 20, 30, 40, 50, 60 then PQ1 = 10, 20, 30  and PQ2 = 40, 50, 60
    - When we have to add() in MPQ how would we know whether internally we have to add in PQ1 or PQ2 ? if the incoming element is greater than peek of PQ2, then we add that element in PQ2 else PQ1
@@ -671,6 +755,8 @@ Heap
    - both are interfaces
    - if a class implements Comparable<T> , it has to implement the compareTo(T other) function
    - if a class implements Comparator<T> it has to implement the compare(T child, T parent) function
+   - Comparator is pluggable while PQ creation unlike Comparable
+
    - For min heap, compareTo(T other) should be implemented like below
      int compareTo (T other) {
            return this.x - other.x;  // x is a member of T class
@@ -683,7 +769,7 @@ Heap
      int compare(T child, T parent) {
          return child.x - parent.x;
     }
-    - When we don't know that on which basis to compare any two objects, we keep several Comparators prepared. Each comparator does comparison on basis of 1 particular thing ( TODO: write the differences properly. Refer durgasoft, code decode, telusko on youtube for the same)
+    - When we don't know that on which basis to compare any two objects, we keep several Comparators prepared. Each comparator does comparison on basis of 1 particular thing 
     - How to use comparator??
         class StudentWeightComparator implements Comparator<Student> {
               int compare(Student s1, Student s2) {
@@ -698,13 +784,27 @@ Heap
 
          PriorityQueue<Student> pq = new PriorityQueue<>(new StudentWeightComparator());
 
-7) Merge K sorted lists
+| Feature                  | `Comparable`             | `Comparator`                      |
+| ------------------------ | ------------------------ | --------------------------------- |
+| Package                  | `java.lang`              | `java.util`                       |
+| Method                   | `compareTo(T o)`         | `compare(T o1, T o2)`             |
+| Sorting logic defined in | Class itself             | Separate class or lambda          |
+| Used for                 | Natural/default ordering | Custom or multiple orderings      |
+| Modifies class?          | Yes                      | No                                |
+| Java 8+ convenience      | —                        | `Comparator.comparing()`, lambdas |
+
+7) Merge K sorted lists (also in LL txt notes Foundation 1)
    - most efficient O(Nlog K) approach using heap
+   - make a Pair of 
+        - li (list index in lists)
+        - di (data index within a particular list)
+        - val
+
 8) Implementation of HashMap
    - HashMap --> array of LLs (like a graph, only difference being presence of a loading factor λ)
    - each cell of the above array is called a bucket
    - each node in the LL is a <key, value> pair
-   - search in HM ≡ search in a specific bucket in HM.... put in HM ≡ put in a specificbucket in HM....similarly for other operations on HM
+   - search in HM ≡ search in a specific bucket in HM.... put in HM ≡ put in a specific bucket in HM....similarly for other operations on HM
    - and time complexity for any operation on HM ≡ time complexity for that operation on 1 single bucket = O(λ) where λ = number of elements in HM (n) / number of buckets in HM or cell in array (N) = n/ N
    - we never let λ cross a particular value (threshold)....so we can say O(λ) ≡ O(constant) or O(1)
    - so average T.C. of any HM operation is O(1) but worst case is still O(n) ..... all elements of HM in 1 single bucket
@@ -712,9 +812,9 @@ Heap
    - How do we know which element should be placed/searched in which bucket? hashFunction(key) which returns bucketIndex
    - 1 way of implemetation of hashFunction() can be as follows
      int hashFunction(K key) {
-        return Math.abs(ket.hashCode()) % buckets.length;
+        return Math.abs(key.hashCode()) % buckets.length;
         
-        // key.hashCode() not hashCode(key)
+        // key.hashCode() not hashCode(key).....hasCode() is a function in Object and thus all class
         // hashCode() can return -ve integer as well
     }
 

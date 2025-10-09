@@ -801,6 +801,8 @@ Heap
         - val
 
 8) Implementation of HashMap
+   - https://github.com/AshuOPragmatikosThrylos/LLD-Problems/tree/main/11.%20HashMap%20Implementation/code
+
    - HashMap --> array of LLs (like a graph, only difference being presence of a loading factor λ)
    - each cell of the above array is called a bucket
    - each node in the LL is a <key, value> pair
@@ -818,6 +820,170 @@ Heap
         // hashCode() can return -ve integer as well
     }
 
+
+
+Graphs
+----------------------------
+Never forget this check ---> visit or do recursive call only if unvisited
+when the graph could be disconnected, we've to always ---> loop through all vertices
+
+
+- What is graph ---> G(V, E)
+- What is a tree then? ---> acyclic graph with a special status node called 'root'
+- Graph is implemented using
+   - adjacency matrix
+       - cons:
+          - space wastage in case of sparse matrix
+          - adding vertex is O(V^2)
+       - pros:
+          - whether there is an edge b/w 2 vertices - O(1)
+   - adjacency list  (G = ArrayList<Edge> [V] i.e graph is array of arraylist of objects)
+       - cons:
+          - whether there is an edge b/w 2 vertices - O(E)
+
+ - 
+   class Edge {
+      int src;
+      int nbr; // neighbour
+      int wt;
+   }
+
+1) has Path? (b/w src and dest vertices)
+ - throuh use of visited[] current node is not allowe to be considered as neighbour of its neighbour
+ - before moving to neighbour, mark current nodes as visited and explore only unvisited neighbours
+ - no need to mark current node as unvisited after exploring all neighbours of current node cuz if no path exists b/w current node and dest
+   ten it doesn't matter throuh which path we reach current node
+2) Multisolver (ceil/floor than criteria, kth largest path)
+3) get connected components
+  - loops through all vertices
+  - do something for each unvisited vertex
+     - what something?
+          - traverse the graph until no unvisited neighbour left while adding vertices in the "connected vertices" arraylist
+
+  - when the graph could be disconnected, we've to always - loops through all vertices
+
+4) is graph connected?
+  - use "get connected components"
+5) derivative of connected components
+    - number of islands
+    - perfect friends
+6) is graph cyclic? (imp)
+  - graph could be disconnected. So even if 1 component of a disconncted graph is cyclic => graph is cyclic
+  - if a node is revisited it is cyclic graph
+  - 
+    boolean is graphCyclic (ArrayList<Edge> graph[]) {
+      boolean []visited = new boolean[graph.length];
+      for(int i=0; i< graph.length; i++) {
+         if(!visited[i] && isComponentCyclic(graph, i, visited))
+            return true;
+      }
+      return false;
+    }
+
+  - isComponentCyclic() can be written using dfs or bfs
+
+7)  is graph bipartite? (very imp)
+  - graph could be disconnected. So even if 1 component is not bipartite => graph is not bipartite
+  - bfs to be used
+  - Pair<node, level> to be pushed in queue
+  - if last level and current level are not same => odd size cycle => not bipartite
+      - in visited[] we store level (instead of boolean []visited)
+      - last level from visited[] and current level from popping out of queue
+  - if false is never returned from above => it could either be acyclic graph or even sized cycle => bipartite
+  - Arrays.fill(arrayName, value) --> fills each cell of arrayName[] with 'value'
+
+8) Spread of infection
+  - 1 edge == 1 unit of time. So as we explore all nodes through edges in bfs wavefronts .... no of edges so far == time passed so far
+  - if a node is already infected i.e if it is revisited
+      - neither we have to increase the number of nodes infected count
+      - nor we should add its neighbours again in queue
+      - so just 'continue' to the next iteration
+9) Dijkstra (single source shortest path ...in terms of weight not in terms of number of edges)
+  - single source shortest path in terms of number of edges --> bfs
+  - doesn't work when -ve weighted edges are involved
+  - dijkstra's is exactly bfs with the only diff being in dijkstra's we use PQ instead of Q
+  - Pair <vertex, psf, wsf> in Q
+  - if already visited, continue to next iteration
+  - TODO: revisit after refering level up version
+  
+10) Prims
+  - used to find MST (Minimum Spanning Tree)
+   - spanning: covers all vertices of a graph
+   - tree: acyclic graph
+   - MST - There might be many STs possible in a graph. The ST with the minimum total cost is called MST
+  - Algos for finding MSTs - Prims, Krushkal's
+  - Pair <vertex, parent, wt> in Q
++----------------------------------------------------+--------------------------------------------------+
+| Prims                                              | Dijkstra                                         |
++----------------------------------------------------+--------------------------------------------------+
+| 1. source need not be given                        | 1. source is given                               |
+| 2. gives relative path and cost (relative from any | 2. gives absolute path (wrt source) and cost     |
+| of the vertex in the partially formed ST)          |                                                  |
+|                                                    |                                                  |
+|                            what goes inside Q (from code perspective                                  |
+|                                        there's no other diff)                                         |
++----------------------------------------------------+--------------------------------------------------+
+
+ - TODO: revisit after refering level up version
+
+11) Topological Sort
+- applicable only for DAG (directed acylic graph)
+   - TS gives and for cyclic graph too but obviously that'll be incorrect cuz in a cyclic graph there can't be any specific order
+   - Kahn's algo (BFS) does not give ans for cyclic graph and gives a correct one for acyclic graph
+- solved using DFS
+- A process is dependent on its child => Do child first => in postorder put in stack
+- Execution order is the opposite of TS which we collect in stack
+- graph could be disconnected => we've to loop through all vertices
+- To verify order of TS sequence --> all edges must be in same direction
+- if question has DAG/dependency --> think about TS
+- TODO: revisit after refering level up version
+
+12) Iterative DFS
+ - impl is just like BFS with the only diff being that in DFS stack is used instead of Q
+ - stack frame created during recursive calls are limited in memory
+     - Java supports only 10k recursive calls in most JVMs
+ - the reference of the exteranl stack used in iterative dfs is created in stack but the actual stack is stored in heap which is not limited in space
+
+13) get all Hamiltonian Path and Cycles
+ - hamiltonian path - visits all vertices exactly once
+ - hamiltonian cycle - if there is an edge between the first (passed as source parameter) and last vertex of a hamiltonian path
+
+ - path => DFS cuz BFS grows radially
+ - base case - all vertices are visited
+ - HashSet over array - to efficiently find if all visited or not
+ - 
+   void hamiltonianPathAndCycles(ArrayList<edge> graph[], int vertex, int source, HashSet<Integer> visited, String psf) {
+     if(visited.size() == graph.length - 1) { // we have already visited n-1 elements and are on nth element now
+        System.out.print(psf);
+        
+        boolean isHCycle = false;
+        
+        for(Edge e: graph[vertex]) {
+          if(e.nbr == source) {
+             isHCycle = true;
+             break;
+          }
+        }
+        
+        if(isHCycle)
+          System.out.println("*");
+        
+        return; //backtracking - we want all paths
+     }
+
+     visited.add(vertex);
+
+     for(Edge e: graph[vertex]) {
+        if(!visited.contains(e.nbr)
+            hamiltonianPathAndCycles(graph, e.nbr, source, visited, psf+" "+ e.nbr);
+
+     }
+
+     visited.remove(vertex); //backtracking - we want all paths
+   }
+
+
+   invocation --> hamiltonianPathAndCycles(graph, src, src, new HashSet<Integer>(), src);
 
 
 Time and Space (Sorting)

@@ -85,7 +85,7 @@ Stacks and Queues
 1) Read from OOPS | Swap Game 3 onwards to just before start of Arrays and Queues section
 2) Dynamic stack...using array.....create array of double size, change reference..........seems O(n) due to copying all elements of old array into new one...but push() even now is O(1)......dynamic me kabhi overflow msg print krne ki zaroort nhi pdti (same with dynamic queue as well.....front pointer humesha update krte hue chalna h)....tos pointer humesha update krte hue chalna h
  
-Queue<> ke aur Stack<> ke alag alag se functions yaad rkhne se accha h always use ArrsyList<> as stack or queue a/c to need
+Queue<> ke aur Stack<> ke alag alag se functions yaad rkhne se accha h always use ArrayList<> as stack or queue a/c to need
 
 Stack<> --> push(), pop()
 Queue<> --> add(), remove()
@@ -132,16 +132,33 @@ note while converting to infix, brackets use krni h
         algo --> pehle dusro k bare me socho....stack me se tum(current ele) kis kis k ans ho   
                  phir khudke bare me.....mera ans bhi pta krna h...therefore put myself in stack
 
-        OL --> traverse R to L.....every cell initiallised with -1
+        OL --> traverse R to L.....every cell initiallised with -1 (direction is opposite cuz dusron k bar me Pehle sochte hue chlna h)
         OR --> traverse L to R......every cell initialised with n(=arr.length)
 
         NG --> arr[st.peek()] < arr[i]
         NS --> arr[st.peek()] > arr[i]
 
-13) Stock Span....it's basically i - NGOL[i]...stock span definition: 1st day before today where stock price was higher than today
+
+    void NGOR (int []arr, int[] ans) {
+       int n = arr.length;
+       Arrays.fill(ans, n);
+
+       Stack<Integer> st = new Stack<>();
+       for(int i =0; i<n; i++) {
+          while(st.size() != 0 && arr[st.peek()] < arr[i]) { // note: while and not if
+             ans[st.pop()] = i;
+          }
+
+          st.push(i);
+       }
+       
+    }
+
+13) Stock Span....it's basically i - NGOL[i]...stock span definition: no of days passed between today and 1st day before today where stock price was higher than today
 
 14) Largest Rectangle/Area in Histogram.....Refer Level Up notes instead
         -- Approach 1 --> NSOR, NSOL used..........mutiple pass solution
+            - width = NSOR - NSOL - 1
         -- Approach 2 (Imp...although most people don't know this) --> 1 pass solution ......... NSOR jab hume milta h to uska hum kaise use krte they in previous solution?.....to ye socho aur NSOR ka code hi likho....NSOL will be whatever is below me in stack (magnitudewise) cuz mere (current ele) se <= ko to hum stack se pop krwa dete h in NSOR..............Caution: for some bars we might not find NSOR...pehle aise cases n se initialise krne par handle ho jate they ....par yahan na hi hum NSOR[] array use kar rhe...aur initially bhi hum stack me -1(cuz we are storing NSOL actually in stack) daal rhe n nhi 
   
         -- T. C of Approach 1, 2 are same but approach 2 does it in less passes of given input array
@@ -150,7 +167,7 @@ note while converting to infix, brackets use krni h
         -- Approach 1: monotonic stack (NGOR) - last NGOR within window is the maximum for that position of window
         -- Approach 2: monotonic deque
 
-16) Merge Overlapping Intervals.....sort the (start, end) pairs. Obviously only adjacent ones can overlap. But someone can overlap with the result of the previous overlap as well like candy crush game. so basically we need to remember order. So we use stack. Push the smallest pair in the stack initially. If the next/current/incoming pair begins after whatever is on the top of stack has ended, then obviously no overlap else overlap. In case of overlap merge. This can be done by correcting the ending time of the top of stack pair with the max of the 2 ending times which we are comparing
+16) Merge Overlapping Intervals.....sort the (start, end) pairs. Obviously only adjacent ones can overlap. But someone can overlap with the result of the previous overlap as well like candy crush game. so basically we need to remember order. So we use stack. Push the smallest pair in the stack initially. If the next/current/incoming pair begins after whatever is on the top of stack has ended, then obviously no overlap else overlap. In case of overlap merge . This can be done by correcting the ending time of the top of stack pair with the max of the 2 ending times which we are comparing
 
 17) Smallest Number Following Pattern ......... Very Unique....Might not remember
      
@@ -178,7 +195,7 @@ note while converting to infix, brackets use krni h
        
       - use a variable 'min' instead of stack                                        
       - just remember the points of changes in min value. How?
-      - instead of incoming element (V) instead of V we always store (V + (V-M)) in stack when V is < M(current min)
+      - instead of incoming element (V) we always store (V + (V-M)) in stack when V is < M(current min)
       - how we will be able to identify that at which places we have not actually stored V ,......for such places element in stack will be < M else not
       - jb ye pop krne ki bari aayi to hum stack se to pop kr denge pr usse (V) pehle min kya tha (M) wo pta kaise chlega
            tos = 2V - M (tos: top of stack)
@@ -1284,11 +1301,146 @@ class Solution {
 Level Up 1
 ------------
 
+Stacks
+-------
+1) NGOR in a circular array
+ -  even when all elemenents on Right are over still the ans could be on left cuz it is circular. So in NGOR replace
+     - traversal from 0 to n-1 to ----> 0 to 2n-1 (can be imagined as same array twice...side by side)
+     - arr[i] to ---> arr[i%n]
+ - push only if i<n cuz now we're traversing till 2n-1 and the indices [n, 2n-1] do not exist
+     - st.push(i%n) is wrong....no exception cuz of modulus but even the indices for which we might have found ans get pushed in stack
+2) Online Stock Span
+ - online: we don't get array as input but we get elements 1 by 1
+ - store Pair<day, price> in stack as w r not given array of stock price....use int[] instead of Pair if readability is not a concern
+ - st.push(new int[] {day, price}) --> wrong
+   st.push(new int[] {day++, price}) --> correct      
+   At 1st invocation of next() i.eon 0th day we see -1 in tos which is actually prev day, so ++ to get current day
+3) Validate Stack Sequences - pushed[], popped[] given as input. return true if the sequences make sense.........Imp
+ - Ex: pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+   o/p: false (1 cannot be popped before 2)
+ - 1 stack for pushed + 1 pointer on popped[]
+ - Algo
+    - iterate over pushed[]
+       - push into stack
+       - pop till tos matches popped[i]
+    - if stack is empty => valid sequences
+4) remove min number of paranthesis to make valid sequence
+ - removing is O(n) instead we'll just not print invalid parenthesis
+ - so we need to remember the indices of invalid parenthesis
+ - if '(' --> push
+ - if ')'
+   - if tos == '(' --> pop
+     else remember index (i.e  push index in stack)
 
+ - If using Java's inbuilt Stack not allowed
+   - use ArrayDeque (faster)
+   - other options
+      - LinkedList (unlimited memory)
+      - implementing SLL --> removeLast is O(n) so not prefered
+      - implementimg DLL --> time taking impl
+5) Asteroids Collision.....V Imp
+ - like candy crush ...cascading collapse possible => use stack
+ - push asteroids[i] only when it does not get destroyed
+     - definitely won't get destroyed in cases: ++, --, -+ (tos, asteroids[i])
+ - only case remaining: +-
+     - G, S (tos, asteroids[i]) G: greater, S: smaller --> asteroids[i] destroyed
+     - ==   --> asteroids[i] destroyed and pop tos cuz it got destroyed too
+     - S, G --> pop all smaller than push yourself cuz asteroids[i] won't be destroyed
+
+    public int[] asteroidCollision(int[] asteroids) {
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        for (int a : asteroids) {
+            boolean destroyed = false;
+
+            // +, -
+            while (!stack.isEmpty() && stack.peekLast() > 0 && a < 0) {
+                int top = stack.peekLast();
+                if (Math.abs(top) < Math.abs(a)) { // S, G
+                    stack.removeLast();
+                    // do not break cuz check others in stack
+                } else if (Math.abs(top) == Math.abs(a)) { // ==
+                    stack.removeLast();
+                    destroyed = true;
+                    break;
+                } else {
+                    // G, S
+                    destroyed = true;
+                    break;
+                }
+            }
+            
+            // definitely: ++, --, -+
+            // might be: +-
+            if (!destroyed) {
+                stack.addLast(a);
+            }
+        }
+        //code 
+   }
+
+6) maximum area rectangle in histogram
+ - O(n) 3 pass solution
+   - width = NSOR [i] - NSOL[i] -1
+ - O(n) 1 pass solution
+   - write NSOR code and remember NSOL = st.peek()
+   - before iterating push -1 in stack
+   - since index cannot be -1 so we do not use st.size != 0 in loop but we use st.peek() != -1
+     so even after iterating all n elements there could still be leftovers in stack for which NSOR = n
+7) Maximal Rectangle.....V Imp
+ - vary height, keep width same => at first consider only row 0, then row 0+row 1 then row 0+row 1+row 2 and so on
+ - compute height[i] for all column (width kept same always)
+     - Note: if the cell in the last considered row is 0 then whole height becomes 0
+ - for each height[], the problem now reduces to largest area rectangle in histogram 
+ - can be solved using DFS to get connected components.....wrong
+   DFS can't ensure rectangle
+ - might have DP solution but not optimal
+8) Maximal Square
+ - like maximal rectangle which uses maximum area of rectangle in histogram
+ - only diff --> in place of h * w in maximum area ofrectangle in histogram --> h < w? h * h : w * w
+9) Remove K Digits.....Imp....many edge cases
+ - since we have to preserve relative ordering of unremoved digits => stack
+ - traverse from MSB to LSB
+    - keep on pushing
+    - as soon as curr ele is less than tos, pop ALL greater from  stack (ofcourse only till k>0)
+ - if even after traversing all characters, k!=0 ...pop till k becomes 0 // easy to miss
+ - now the stack holds the reqd sequence
+ - do not print leading 0s (mentioned in question) (a/c to ques o/p of 10200, 1 should be 200 and not 1020)
+ - if after removing all leading 0's the ansswer sequence becomes empty string then print 0 instead of empty string // easy to miss edge case
+10) Remove Duplicate Letters - DIY - if can do in 1st attempt => u r good with easy logic, hard to code ques
+ - visited[] 
+     - occured before on left or not (needed to exclude duplicates)
+     - while popping make visited false
+ - freq[] 
+     - will occur again on the right or not (to ensure while popping that every letter remains at least once in the final result)
+     - decrement on each visit 
+ - both visited[], freq[] are required. they have different purposes
+11) Trapping Rain Water
+ - find water above every building and add them
+ - water above a building = min(lmax, rmax) - height of building
+   lmax: max height while travelling L to R
+   rmax: max height while travelling R to L
+ - whether rmax is the actual greatest on right of current or not is irrelevant. It's the min height that matters
+    - actual greatest will be rmax or > rmax. min height will still remain the same
+
+ - totalWater += lmax < rma ? lmax - height[l++] : rmax - height[r--]
+
+ - using 2 pointers.....time: O(n), space: O(1) 
+     - 3 more methods; less efficient
+
+
+HashMaps and Heaps
+----------------------------
 
 
 
  
+level up 1 --> 133
+level up 2 --> 150
+level up 3 --> 141
+level up 4 --> 117
+
+
 continue studying from.........
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)

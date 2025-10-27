@@ -632,12 +632,15 @@ Heap
         - In sorted array min most element will be at 0th index and since it cannot be displaced on left, (no space...no valid array index on left) it can only be displaced upto index (k+0) on the right....so if we consider (k+1) elements from index 0 to index k, we'll definitely get the min element ...so heap of size (k+1) is enough... once we remove an element from heap to get current min only then we should add any further element in the heap...since the number of element in the heap should not exceed (k+1) 
         - add first then remove from heap is also ok but that'll just increase heap size which is not really needed .... kyunki heap me agar zaroort se zyada elements hi rakhna hota to n element hi kyu nhi rakh liye
 
-3) Longest consecutive sequence of elements (like 5,6,7,8..... these can occur in any order and at any index which need not necessarily be continuous indexes)
-   - either need to check ki previous element h ki nhi or need to check ki next element h ki nhi in the given sequence ...this search needs to be in as min time as possible.... therefore store every element in HashMap
-   - we also need to print the sequence itself at the end... so need to know the starting or ending point of the LConsecutiveSequence (along with the size of the sequence of course) ...... therefore also store a marker in hashmap corresponding to every element indicating whether it is the starting/ending element or not
-   - Algo:
-        - 1. for every element in hashmap which is a starting/ending point, check if prev/next element exists....if it does current element is not the starting/ending point....mark for current element accordingly
-        - 2. now for every element in hashmap which is still a starting point (an actual one not an assumed one) ..... count how many elements are present in sequence and find the longest such sequence
+3) Longest consecutive sequence of elements (like 5,6,7,8..... these can occur in any order and at any index which need not necessarily be continuous indexes) - Refer Level Up 1 instead and not Foundation 2
+   - fill all in hashset
+   - now for each element in array
+      - if it is present in hashset
+         - remove it
+         - keep on removing previous element if present in set
+         - keep on removing next element if present in set
+
+         - len = Math.max(len, nextE - preE - 1)
 
 4) Implementation of PriorityQueue using heap .... Imp
    - a BT is a heap if
@@ -760,7 +763,8 @@ Heap
       and so on
                     
 
-5) Median Priority Queue ... instead of max/min the heap should return median (middle element) in current sorted array in O(1) time
+5) Median Priority Queue/Find median from data stream ... instead of max/min the heap should return median (middle element) in current sorted array in O(1) time
+   - Approach 1: insertion sort as it is an online algorithm....O(n^2)
    - PQ can only be min/max heap....we have to somehow adapt MPQ from a PQ
    - Internally MPQ for user = PQ1(max) + PQ2(min) ..... if MPQ = 10, 20, 30, 40, 50, 60 then PQ1 = 10, 20, 30  and PQ2 = 40, 50, 60
    - When we have to add() in MPQ how would we know whether internally we have to add in PQ1 or PQ2 ? if the incoming element is greater than peek of PQ2, then we add that element in PQ2 else PQ1
@@ -1163,7 +1167,7 @@ Quickselect      | T(n) = T(n/2) + O(n)               | O(n)                    
        - Arrays.sort(arr);
        - two pointers at opposite ends
 
-14) leetcde 33 - Search Element in Rotated Sorted Array - I (array has distinct elements) (Take You Forward - Youtube)
+14) leetcode 33 - Search Element in Rotated Sorted Array - I (array has distinct elements) (Take You Forward - Youtube)
    - binary search application
    - identify which half is sorted
         - if(arr[lo] <= arr[mid]) => left half (from lo to mid) is sorted
@@ -1423,7 +1427,7 @@ Stacks
  - whether rmax is the actual greatest on right of current or not is irrelevant. It's the min height that matters
     - actual greatest will be rmax or > rmax. min height will still remain the same
 
- - totalWater += lmax < rma ? lmax - height[l++] : rmax - height[r--]
+ - totalWater += lmax < rmax ? lmax - height[l++] : rmax - height[r--]
 
  - using 2 pointers.....time: O(n), space: O(1) 
      - 3 more methods; less efficient
@@ -1431,10 +1435,133 @@ Stacks
 
 HashMaps and Heaps
 ----------------------------
+frequency of alphabets --> frequency array cuz limited
+freq of numbers --> hashmap if range is very large or not limited
 
+1) top k frequent elements
+  - similar to k largest elements
+  - make a min heap of k elements only
+  - after size crosses k --> remove
+  - eventually the k elements left in the minheap will be the max frequency elements (cuz min ko to hm htate ja rhe the)
 
+  - similar problem: k closest points to origin
+2)  kth smallest element in a sorted matrix
+  - put 0th column in PQ initially
+  - 2D index to 1D index for n * m matrix
+      (r, c) --> (r * m + c)
+  - 1D index to 2D index
+      idx --> r = idx / m
+              c = idx % m
+3) Insert Delete getRandom in O(1) (easy)
+  - reqd: arraylist, hashmap<value, index in list>
+  - remove() is the most imp
+   
+4) Maximum Frequency Stack
+  - Approach 1 - HashMap + PQ ...... TC: O(log n) for push, pop; SC: O(4n) (3n for Pair, n for hashmap)
+      - maximum => PQ
+      - frequency => frequency map
+      - If there is a tie for the most frequent element, the element closest to the stacks's top is removed => remember which is inserted when => maintain index
+      - Pair<val, freq, idx> in PQ
+      - if on decrementing freq in freqMap it becomes 0, don't forget to remove key from freqMap
 
+  - Approach 2 - HashMap + Stacks ...... TC: O(1) for push, pop; SC: O(2n) (n for arraylist of stacks, n for hashmap)
+      - frequency => frequency map
+      - maxFreq variable
+      - list of stacks - ArrayList<Stack<Integer>> list
+          - 1 stack per frequency
+          - list.get(1) gives stack1 in which we store all val whose freq is 1
+              - when the freq of val increases to 2, we don't change stack1 but we now add val in stack2
+5) Trapping Rain Water 2 .... very imp
+  - cannot be sole like trapping rain water 1D
+     - tw += min(lmax, rmax, umax, dmax) - height[i][j] is wrong
+  - fill all cells of all 4 outer walls in PQ initially and mark them as visited
+  - 
+        int minBoun = 0, water = 0;
+
+        while (pq.size() != 0) {
+            int idx = pq.remove();
+            int i = idx / m, j = idx % m;
+
+            // Math.max cuz if the nearer boundary is higher then it blocks the water not the farther outer boundary
+            // argument minBound is from prev iteration before shrinking boundary
+
+            minBoun = Math.max(minBoun, heightMap[i][j]);
+            water += minBoun - heightMap[i][j];
+
+            for (int d = 0; d < 4; d++) {
+                int r = i + dir[d][0];
+                int c = j + dir[d][1];
+
+                // visit unvisited neighbours
+                if (r >= 0 && c >= 0 && r < n && c < m && !vis[r][c]) { 
+                    // shrinking boundary
+                    vis[r][c] = true;
+                    pq.add(r * m + c); 
+                }
+            }
+        }
+6) Swim in rising water
+  - Approach 1: PQ (min heap) - single source shortest path
+      - visited array required
+      -  
+        pq.add(0); // 1D index of (0,0)
+        vis[0][0] = true;
+
+        int waitingTime = 0;
+
+        while (pq.size() != 0) {
+            int idx = pq.remove(); // popping means new node is now visited
+            
+            // code for 1D to 2D index mapping
+
+            // Note: max.....cuz whichever is more we'll have to wait at least that much time to be able to swim across
+            waitingTime = Math.max(waitingTime, height); // waitingTime = current water level
+            if (i == n - 1 && j == n - 1)
+                break;
+
+            // visit unvisited neighbours (in next iteration)
+            for (int d = 0; d < dir.length; d++) {
+                int r = i + dir[d][0];
+                int c = j + dir[d][1];
+
+                if (r >= 0 && c >= 0 && r < n && c < n && !vis[r][c]) {
+                    vis[r][c] = true;
+                    pq.add(r * n + c); // adding in PQ cuz i want the min one
+                }
+            }
+        }
+        return waitingTime;
  
+
+  - Approach 2: Binary search on ans (here we've to find min time so ans is time)
+      - How did we know BS can be used? 
+          - "minimise the max" type of problem
+              - what is the least time => find min
+              - at most t => if level at two cells r not same already then to swim across need to wait till -> max(current water level, height of building)....ya to wo meri barabari kr le ya m uski barabari kr lu \
+          - left and right bounded search space
+
+      - 
+         int l = grid[0][0], r = n * n -1;
+         while(l <= r) {
+            
+            if(dfs()) { // dfs() --> does a path exist with 'mid' as waiting time
+               result = m;
+               r = m - 1;
+
+            } else
+               l = m + 1;
+         }
+
+7) Smallest range covering elements from k sorted lists - DIY....easy
+8) IPO - Maximize final capital by choosing up to k profitable, affordable projects - given: k, initialCapital, profits[], capital[]....DIY 
+    - idea: repeat k times - out of the projects that can be done in the available capital, pick the project with the max profit
+    - algo
+   	 - make project[i][] = capital[i] + profits[i]
+         - sort on basis of capital....not necessay but to prevent checking all the projects
+         - all those projects whose capital <= availableCapital ....add such projects in maxHeap so that we can get the one with the max profit
+ 
+  
+
 level up 1 --> 133
 level up 2 --> 150
 level up 3 --> 141

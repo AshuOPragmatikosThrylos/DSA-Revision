@@ -597,6 +597,8 @@ a particular data structure is unordered ==> the order of insertion is not the s
 
 Inbuilt HashMap functions --> getOrDefault(key, defaultValue), putIfAbsent()
 
+putIfAbsent() doesn't overwrite unlike put()
+
 Heap
    - PriorityQueue<Integer>pq = new PriorityQueue<>(); // min heap
    - PriorityQueue<Integer>pq = new PriorityQueue<>(Collections.reverseOrder()); // max heap 
@@ -1561,6 +1563,312 @@ freq of numbers --> hashmap if range is very large or not limited
          - all those projects whose capital <= availableCapital ....add such projects in maxHeap so that we can get the one with the max profit
  
   
+Arrays and Strings
+----------------------------
+>0 check is always safer than !=0 check
+never do ++ or -- in if() or while() ....do it in the body {}
+
+1) Max possible sum of i* A[i]. A[] can be rotated in any direction, any number of times....DIY
+  - start with brute force ... O(n^2)
+  - efficient approach ....O(1)
+      - rotate by 1 and try to see how sum changed
+      - this way we'll not have to actually rotate and recompute sum by traversing whole array again and again
+      - sum i+1 = sum i + sum of elements - (n * A[n-i]) (rotated clockwise)
+      - sum i+1 = sum i - sum of elements + (n * A[n-i]) (rotated anti-clockwise)
+      - don't need to check both formulas cuz if we r rotating n times it makes no diff
+2) Container with most water
+  - start with brute force ... consider every possible pair of lines ... O(n^2)
+  - 2 pointer approach
+  - moving the pointer with the smaller height might give us maxArea
+       - provided we consider the current area even before moving the pointers
+  - moving the pointer with the larger height will always give smaller area as compared to current area
+
+    public int maxArea(int[] arr) {
+        int n = arr.length, maxArea = 0, i = 0, j = n - 1;
+        while (i < j) {
+            int w = j - i;
+            maxArea = arr[i] < arr[j] ? Math.max(maxArea, arr[i++] * w) : Math.max(maxArea, arr[j--] * w);
+        }
+
+        return maxArea;
+    }
+ 
+
+| Problem                        | What you maximize     | Depends on       | Typical Approach  |
+| ------------------------------ | --------------------- | ---------------- | ----------------- |
+| Container With Most Water      | Water between 2 lines | Two chosen lines | Two pointers      | Area=(j-i)×min(height[i],height[j])
+| Trapping Rain Water            | Total trapped water   | All bar heights  | Two pointers      | wateri​=min(leftMaxi​,rightMaxi​)-height[i]
+| Largest Rectangle in Histogram | Area under bars       | Width per bar    | Stack             | Area=height[i]×(rightLimiti​-leftLimiti​-1) ... leftLimit[i] = index of the first smaller bar to the left of i
+
+
+Pattern for occurances in a window questions (sliding window)
+
+   - `count` variable to differentiate between the two states of the window - when window has and does not have something
+   - freqMap[] required
+
+   - while(ei < n) {
+
+         if(condition on freq of ei) {
+            update count
+            adjust freqMap
+            increment ei
+
+         }
+
+         while(condition on count) {
+
+            if(condition on freq of si) {
+               update count
+               adjust freqMap
+               increment si
+            }
+         }
+
+    }
+
+
+3) Fruit into baskets (essentially same as longest substring with at most 2 distinct characters)  .... DIY
+  - instead of 
+       moving the start pointer in such problems which deal with occurances in a window, (inefficient)
+    we can 
+       remember indices of characters (efficient)
+
+4) Minimum Window Substring....DIY good question
+5) Max number of vowels in a substring of given length.....DIY
+
+6) Longest substring with exactly k unique characters
+7) number of Subarrays with K different integers....V Imp
+   - understand how is it different from above substring problem
+       - we can't just increase answerCount in place of len = Math.max(len, ei-si)
+       - cuz there may be multiple valid subarrays ending at current ei (not just one)
+       - ex: [1, 2, 1], k=2 ---> there are 2 answer subarrays ending at the last 1 .... [1, 2, 1], [2, 1]
+
+   - ans = atMostKDistnct(arr, k) - atMostKDisinct(arr, k-1)
+   - NOTE: we don't increment count by 1 in atMost() but by ei-si
+
+Extra: (num & 1) != 0 => num is odd
+
+8) number of non empty subarrays - given a binary array and a sum = `goal` ....Binary Subarrays With Sum
+   - ans = atMost(tar) - atMost(tar-1)
+   - why such a formula? cuz tar will be achieved by adding 1 again and again....basically this is no of 1 problem disguised as sum problem
+9) Max consecutive ones in a binary array
+   - apart from the sliding window approach as used for above other problems
+       slightly optimised approach --> when a 0 is encountered do si = ei after ei++
+10) Max consecutive ones if can flip at most one 0....Imp
+   - apart from the sliding window approach as used for above other problems
+       slightly optimised approach -->  when encounter 0 adjust firstZexoIndex (index of previous zero) cuz at most one 0 is allowed in the window
+   - follow up Q: can flip at most k 0s.....replace count == 2 (or count > 1) with count > k
+
+
+Pattern (occurance in a window) end
+
+prefix sum is making new sum by adding in old sum
+alternative but not efficient way is ....each time on addition of new element, adding all the elements to get sum
+
+11) number of subarray such that  Subarray sum divisible by k......V Imp
+   - need to find cumulative sum (prefix sum) at  each element
+   - for a subarray AB to be divisible by k
+       (b-a) % k == 0
+     => b % k == a % k == r
+     => if the remainders at two points are equal, then the subarray between those points will be our desired subarray
+   - how man such subarrays?
+      - find remCount[r] for each r (r can range from 0 to k)
+      - for each remCount[r] = n, ans += nC2
+   - how to find nC2 easily?
+      - nC2 = (n*(n-1)))/(2*1) = 1 + 2 + .....+ n
+      - so at each stage add remCount[r] in ans then increment remCount[r] by 1
+   - don't forget to initialise remCount[0] = 1 (if not then we would have lost one subarray from 0th index to the element where r == 0 has been found for the first time cuz ans+= remCont[0] would be ans += 0)
+
+
+b: sum from 0th element to Bth element
+a: sum from 0th element to Ath element
+
+12) longest subarray with sum divisible by k
+  - almost same as prev prob
+  - rem[0] = -1 // storing first index  of remainder and not count
+  - distinction of "remainder not found yet" cannot be != -1 as that is the index for remainder 0
+     - so use != -2
+     - initialise rem[i] with -2 except for 0th index
+ 
+13) number of subarrays with equal 1s and 0s.....Imp
+  - replace 0 with -1
+  - prefix sum
+
+  - our desired subarray is the subarray between two points with same sum
+
+  - increase count by value of key = sum in map
+  - update map
+  - NOTE: initialise count = 1 for sum = 0 for the first occurance of sum = 0
+
+  - Follow up Q: longest subarray....initialise with index = -1 for sum = 0; store index of first occurance of key = sum in map...if 2nd, 3rd...occurance don't store ----> putIfAbsent() can be used
+
+14) Sliding Window Maximum (also in Stacks and Queues Foundation 1) ..... V Imp
+  - Brute force - TC: O(nk); SC: O(1)
+  - PQ - TC: O(nlogn); SC: O(n) // using java's heap
+  - TreeMap - TC: O(nlog k); SC: O(k) // TreeMap eagerly deletes, so size ≤ k; PQ deletes lazily, so size can grow to n
+
+  - less intuitive solutions
+      - Stack - TC: O(n); SC: O(n) // idea: last NGOR in the window is the max
+      - Queue (most optimal) - TC: O(n); SC: O(k) // idea: maintain decreasing monotonic queue // intuition got after PQ soln: Bigger element dominates all smaller left elements → discard smaller ones → remaining decreasing deque’s front is max
+    
+ 
+ - HashMap is not ordered
+   TreeMap is HashMap but ordered
+ - TreeMap is nothing but balanced BST
+ - Every operation in a BST is O(height) and if it is balanced i.e for TreeMap it height = log n
+ - In TreeMap duplicates are compressed using frequency
+ - lastKey(), firstKey(), floorKey(), ceilingKey() all in O(log n)
+
+ - Monotonic = always moves in one direction (never zig-zags)
+     - Monotonic increasing → each next value ≥ previous
+     - Monotonic decreasing → each next value ≤ previous
+
+
+
+15) Maximum Sum Subarray.......V V V Imp
+  - Approach 1 O(n^3) --> O(n^2) to make subarrays * O(n) to calculate sum for each subarray
+  - Approach 2 O(n^2) --> O(n^2) to make subarrays + O(n) to make prefixSum[] (subArraySum = prefixSum[end + 1] - prefixSum[start])
+  - Approach 3 Divide & Conquer O(nlogn)
+     - either in left part or in right part or across mid
+     - calculate max prefix sum 
+         - from mid to si
+         - and from mid to ei
+         - and add them
+  - Approach 4 Kadanes O(n)
+     - currentSum, globalSum
+     - 2 types of Kadanes
+         - which does not return negative sum but return 0
+             - start over when currentSum becomes <=0 i.e set currentSum to 0 cuz no point i cosidering subarray with sum 0 and negative sum will only decrease incoming sum
+             - things to remember
+                - check: csum <= 0
+                - csi = i + 1
+             -  
+                                    public int[] maxSubArray(int[] arr) {
+                                        int gsum = 0, csum = 0, gsi = 0, gei = 0, csi = 0;
+
+                                        for (int i = 0; i < arr.length; i++) {
+                                            int ele = arr[i];
+                                            csum += ele;
+
+                                            if (csum > gsum) {
+                                                gsum = csum;
+                                                gsi = csi;
+                                                gei = i;
+                                            }
+
+                                           if (csum <= 0) { // note this is after comparison with gsum; reset krne se pehle consider for gsum
+                                                csum = 0;
+                                                csi = i + 1; // skip negative sum subarray
+                                           }
+                                       }
+                                      return new int[] {gsum, gsi, gei};
+                                  }
+
+         - which returns negative sum
+             - we move forward with csum being whatever is higher among the updated csum (csum+ele) or the ele itself
+             - things to remember
+                - check: ele >= csum
+                - csi = i
+                - gsum is initialised with -(int) 1e9 unlike type 1 kadanes
+             -   
+                                    public int[] maxSubArray(int[] arr) {
+                                        int gsum = -(int)1e9, csum = 0, gsi = 0, gei = 0, csi = 0;
+
+                                        for (int i = 0; i < arr.length; i++) {
+                                            int ele = arr[i];
+                                            csum += ele;
+
+                                           if (ele >= csum) { // note this is before comparison with gsum; why before? You must pick the better path before deciding if this newly chosen path is the global winner
+                                                csum = ele;
+                                                csi = i; // ele will be > old csum + ele only when old csum was < 0 .... so skipping negative sum subarray means skipping till old csum
+                                           }
+
+                                            if (csum > gsum) {
+                                                gsum = csum;
+                                               gsi = csi;
+                                               gei = i;
+                                            }
+                                       }
+                                      return new int[] {gsum, gsi, gei};
+                                  }
+             - Think of each index as a "checkpoint":
+                                         - At every index:
+                    - Choose path A: continue old sum
+                    - Choose path B: start fresh at current element
+                - You must pick the better path before deciding if this newly chosen path is the global winner
+
+Extra: kadanes doesn't work for > or <. Just adding < or > won't give correct results
+
+16) max absolute sum of any subarray....easy DIY
+   - approach 1: double kadanes
+      - ans = max (maximised +ve sum, - numerically maximised -ve sum)
+      - for maximised +ve sum, whenever sum becomes < 0, start over (i.e make sum = 0)
+      - for numerically maximised -ve sum, whenever sum becomes > 0, start over (i.e make sum = 0)
+   - approach 2: max sum - min sum
+      - How did we arrive at ans = max sum - min sum?
+          - maximise (b-a) = maximise b - minimise a
+
+              b: sum from 0th element to Bth element
+              a: sum from 0th element to Ath element
+
+17) k concatenation max sum ..........Imp but not easy   to arrive at solution 
+ - ans = (int) Math.max(kadanesSum, maxPrefixSum + maxSuffixSum + (k-2) * arraySum)
+ - before that do --> arraySum = arraySum < 0 ? 0 : arraySum
+ - even before that do --> if (k==1) return kadanesSum
+ - explanation
+    - k == 1 --> understandabe
+    - k == 2 (kadanes of 2) --> 
+        - either ans will be in 1st array --> kadanesSum
+        - or across 2 arrays --> maxPrefixSum + maxSuffixSum
+        - so ans = whichever is max among above 2
+    - k > 2
+        - arraySum >= 0 --> 
+              [———–[#####]———–] .....(k-2) arrays in between.....[———–[#####]———–]
+
+                        ans =                  <---------------------------------------------------------->
+
+        - arraySum < 0 --> 
+             - considering even 1 copy of the complete array will only decrese the sum
+             - so ans is the same as when k==2 i.e kadanes of 2
+
+18) Max sum rectangle in a 2D matrix - kinda similar to Maximal Rectangle (Stacks)
+ - vary height, keep width same => at first consider only row 0, then row 0+row 1 then row 0+row 1+row 2 and..... then row 1, then row 1 + row 2, then row 1 + row 2 + row 3....and so on 
+ - compute height[i] for all column (width kept same always)
+ - for each height[], the problem now reduces to kadanes of 1D array
+
+19) Number of submatrices that sum to target.....DIY
+ - like previous problem
+ - consider all possible rectangles like above problem
+ - make 2D --> 1D
+ - apply actual problem on 1D array
+    - use prefix sum for that
+
+20) Rabbits in Forest ..... good question....only person with clarity of thought can do it in 1 attempt
+ - 
+    public int numRabbits(int[] answers) {
+        int []kitneLogonNeSameJawabDiya = new int[1000]; // Constraint in ques: 0 <= answers[i] < 1000 // <key, value> == <jawab, kitneLogonNeSameJawabDiya>
+
+        int ans = 0;
+
+        for(int kitneAadmiThe : answers) {
+            int ekThaliKChatteBatte = kitneAadmiThe + 1;
+
+            // min poocha h..isliye baar baar count ni krna
+            // jb jawab pehli bar sunne ko mila sirf tbhi count krna h
+
+            if(kitneLogonNeSameJawabDiya[kitneAadmiThe] == 0)
+                ans += ekThaliKChatteBatte;
+
+            kitneLogonNeSameJawabDiya[kitneAadmiThe]++;    
+
+            if(kitneLogonNeSameJawabDiya[kitneAadmiThe] == ekThaliKChatteBatte)
+                kitneLogonNeSameJawabDiya[kitneAadmiThe] = 0;// thali puri hui, ab same jawab next time would mean new thali
+        }
+        return ans;
+        
+    }
+
+
 
 level up 1 --> 133
 level up 2 --> 150
@@ -1568,7 +1876,7 @@ level up 3 --> 141
 level up 4 --> 117
 
 
-continue studying from.........
+
 30 turns per completely free full day......speed
 roughly 730 turns (Foundation 1,2 + Level Up 1,2,3,4)
 

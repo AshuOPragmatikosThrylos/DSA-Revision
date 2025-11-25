@@ -16,7 +16,7 @@ Arrays
 
 1) Spiral Traversal....box k andar box se solve kro, innermost box might not have all walls.....count < tne in outer as well as inner loops
 2) Rotate Matrix by 90 degree clockwise.....transpose given matrix then reverse each row...... Transpose me [i][j] ko [j][i] se swap karna hota h but this cannot be done for all i,j combinations.....only for half of total combinations...in which j>=i...j begins from i
-3) Search in a sorted 2D array
+3) leetcode 240 Search in a sorted 2D array/matrix 
 
 
 Strings, String Builders, ArrayLists
@@ -1073,11 +1073,21 @@ int[] mergeSort(int[] arr, int lo, int hi) {
 6) Quicksort
  - inplace algo (no new space is created)
  - T.C: avg: O(nlogn), worst: O(n^2) (when already sorted)
+ - in randomised QS, we swap the pivotIndex and the lastIndex ; rest all is same afterwards
+    - To find random value in a range --> Math.random() * (max - min + 1) + min
+    - Math.random() returns double 
+    -  
+       int pivotIndex = low + (int)(Math.random() * (high - low + 1));
+       swap(arr, pivotIndex, high);
  - method signature should have 3 things - arr[], lo, hi
 
  void quickSort(int[] arr, int lo, int hi) {
    
     // base case
+
+    // below 2 lines for randomised QS
+    // int pivotIndex = low + (int)(Math.random() * (high - low + 1));
+    // swap(arr, pivotIndex, high);
 
     int pivot = arr[hi];
     int pi = partition(arr, pivot, lo, hi);
@@ -1170,7 +1180,7 @@ Quickselect      | T(n) = T(n/2) + O(n)               | O(n)                    
        - two pointers at opposite ends
 
 14) leetcode 33 - Search Element in Rotated Sorted Array - I (array has distinct elements) (Take You Forward - Youtube)
-   - binary search application
+   - application of binary search
    - identify which half is sorted
         - if(arr[lo] <= arr[mid]) => left half (from lo to mid) is sorted
         - if(arr[mid] <= arr[hi]) => right half (from mid to hi) is sorted
@@ -1178,7 +1188,7 @@ Quickselect      | T(n) = T(n/2) + O(n)               | O(n)                    
 
 
             // Check if left half is sorted
-            if (nums[left] <= nums[mid]) {
+            if (nums[left] <= nums[mid]) { // Note: = should be handled with left half else wrong answer....alternative: use equals in both but use if-if and not if-else...if do not use = in the if-condition for right half in leetcode 81 then get TLE....conclsion: use if-if and use = in both the conditions for left and right sorted check     
                 if (target >= nums[left] && target < nums[mid]) {
                     right = mid - 1; // search left half
                 } else {
@@ -1220,7 +1230,7 @@ Quickselect      | T(n) = T(n/2) + O(n)               | O(n)                    
     - T.C: avg: O(log n)
            worst: O(n).....li++, hi-- might lead to exploring almost all the array...when the array has a lot of duplicates ..... 3 3 3 3 1 3 3 3 3
 
-16) leetcode 153 - pivot/min in rotated sorted array
+16) leetcode 153 - pivot/min in rotated sorted array ....tricky
 
 public int findMin(int[] arr) {
   int lo = 0;
@@ -1232,7 +1242,7 @@ public int findMin(int[] arr) {
 
     if (arr[lo] <= arr[hi]) { // not necessary; is just optimisation // when both halves are sorted
 
-      // return arr[lo]; // wrong
+      // return arr[lo]; // wrong // easy to make mistake
 
       min = Math.min(min, arr[lo]);
       break; // note: in problem 15 it was continue
@@ -1240,11 +1250,11 @@ public int findMin(int[] arr) {
 
     if (arr[lo] <= arr[mid]) {
       min = Math.min(min, arr[lo]);
-      lo = mid + 1; // exclude all other elements from left half from search space
+      lo = mid + 1; // exclude all other elements from left half from search space // easy to miss
     }
     if (arr[mid] <= arr[hi]) {
       min = Math.min(min, arr[mid]);
-      hi = mid - 1; // exclude all other elements from right half from search space
+      hi = mid - 1; // exclude all other elements from right half from search space // easy to miss
     }
   }
 
@@ -1252,7 +1262,7 @@ public int findMin(int[] arr) {
 }
 
 
-17) leetcode 154 - pivot/min in rotated sorted array 2
+17) leetcode 154 - pivot/min in rotated sorted array 2....V V Imp
 - like 153 and
 - shrink space when arr[lo] == arr[mid] == arr[hi]
 
@@ -1835,15 +1845,41 @@ Extra: kadanes doesn't work for > or <. Just adding < or > won't give correct re
  - vary height, keep width same => at first consider only row 0, then row 0+row 1 then row 0+row 1+row 2 and..... then row 1, then row 1 + row 2, then row 1 + row 2 + row 3....and so on 
  - compute height[i] for all column (width kept same always)
  - for each height[], the problem now reduces to kadanes of 1D array
+---------------------------------------------------------------------------------
+19) 209 Min Size Subarray sum ...min size of subarray whose sum >= target
+ - subarray sum => use prefix sum (sum += ele)
+    - subarray sum = prefixSum[ei] - prefixSum[l-1]
+ - if the prefix sum >= target (=> subarray(0, ei) has sum >=target), keep on (while loop) moving si pointer forward so that we can get min length
+    - but as we move si forward due to monotonically increasing nature of prefix sum of positive integers only array, subarray sum will decrease (don't forget to adjust it i.e subarray sum contained in prefixSum). So eventually we will come out of while loop when prefixSum is no longer >= target
 
-19) Number of submatrices that sum to target.....DIY
- - like previous problem
+20) 862 Shortest Subarray with Sum at Least K - exactly same problem as above just that now we can have negative integers as well
+  - since we have negative integers as well therefore moving si to right might not decrease sum always. Therefore two pointer approach will not work
+  - maintain monotonic increasing in deque
+     - keep different directions for popping to make queue monotonically increasing and for popping to make >=k condition valid --> invalid
+
+21) 363 Max Sum Of Recatangle No Larger Than K
+ - subproblem - Subarray sum at most k .... Imp
+    - use TreeSet to find ceiling
+ - like "Max sum rectangle in a 2D matrix"
  - consider all possible rectangles like above problem
  - make 2D --> 1D
  - apply actual problem on 1D array
     - use prefix sum for that
 
-20) Rabbits in Forest ..... good question....only person with clarity of thought can do it in 1 attempt
+
+19 --> sliding window
+20 --> Monotonic Deque
+21 --> TreeSet
+---------------------------------------------------------------------------------
+22) Number of submatrices that sum to target.....DIY
+ - subproblem - Subarray sum equals target .... Imp
+ - like "Max sum rectangle in a 2D matrix"
+ - consider all possible rectangles like above problem
+ - make 2D --> 1D
+ - apply actual problem on 1D array
+    - use prefix sum for that
+
+23) Rabbits in Forest ..... good question....only person with clarity of thought can do it in 1 attempt
  - 
     public int numRabbits(int[] answers) {
         int []kitneLogonNeSameJawabDiya = new int[1000]; // Constraint in ques: 0 <= answers[i] < 1000 // <key, value> == <jawab, kitneLogonNeSameJawabDiya>
@@ -1867,6 +1903,361 @@ Extra: kadanes doesn't work for > or <. Just adding < or > won't give correct re
         return ans;
         
     }
+ 
+  
+Searching and Sorting (includes Application of binary search)
+----------------------------
+
+while (l<=r) has to be accompanied by l++ and r--
+while(l<r) has to be accompanied by l++, r or l, r-- .....if e use l<=r and do not increment or decrement in either body of if or else then we'll get TLE
+
+(observed in multiple problems....in this section observed in "Koko eatin bananas")
+ 
+
+1) Search Insert Position (no duplicates)
+ - approach 1
+     - exactly BS code
+     - except return si and not -1 if not found
+ - approach 2 - just before the insert position
+
+2)  Search Insert Position (with duplicates)
+ - just before the insert position
+ - 
+              public static int searchInsert(int[] arr, int data) {
+                  int n = arr.length, si = 0, ei = n - 1;
+                  while (si <= ei) {
+                     int mid = (si + ei) / 2;
+                     if (arr[mid] <= data)
+                         si = mid + 1; 
+                     else
+                         ei = mid - 1;
+                  } 
+
+                 int insertPos = si;
+                 int lastIndex = si - 1;
+
+                 return (lastIndex >= 0 && arr[lastIndex] == data) ? lastIndex : insertPos;
+            }
+
+3) Find closest number in sorted array
+ - approach 1: min abs diff while iterating over array - O(n)
+ - approach 2: whichever among ceil or floor is closest - O(logn)
+    - for ceil and floor refer foundation 1
+ - approach 3 (easiest to code) - O(logn)
+   - standard BS code
+   - when si no longer <= ei, then whichever is closer among si or ei is our ans
+      - (data - arr[ei] < arr[si] - data)? arr[ei] : arr[si]
+
+4) see how leetcode 74 is different from leetcode 240
+ - leetcode 74 can be solved in O(m+n) and O(log(mn))
+ - leetcode 240 can be solved only in O(m+n)
+
+5) count inversions in an array (two elements a[i] and a[j] form an inversion if a[i] > a[j] and i<j)
+ - divide and conquer
+ - ans = f(left) + f(right) + count across array
+ - count across array can only be computed when the left, right subarrays are sorted
+ - so algo: mergeSort
+    - diff
+       - return count from f(left), f(right)
+       - when merging the sorted subarrays, compute count across them
+
+6) leetcode 1 - Two sum - given: unsorted array, target, has no duplicates
+ - 
+    public int[] twoSum(int[] arr, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+    
+        for (int i = 0;i<arr.length; ++i)
+        {
+           int complement = target - arr[i];
+           if(map.containsKey(complement))
+               return new int[]{i, map.get(complement)};
+            else
+               map.put(arr[i],i);
+        }
+        return new int[0];
+    }
+
+ - similar question: 2 sum count....DIY
+   - Q: A[i] + B[j] == target; find count of (i,j)
+
+7) k sum
+ - kSum is dependent on (k-1)Sum
+ - 
+    public List<List<Integer>> kSum(int[] arr, int target, int k, int si, int ei) {
+        if (k == 2)
+            return twoSum(arr, target, si, ei);
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for (int i = si; i < ei;) {            // note : not <=ei; n increemnt in the loop itself
+            List<List<Integer>> smallAns = kSum(arr, target - arr[i], k - 1, i + 1, ei);  // note: starts from (i+1); in twoSum() we do while(si<ei) not while(si <=ei)
+
+            prepareAns(ans, smallAns, arr[i]);
+
+     // note: below done cuz arr[si] can occur multiple times...similar thing we've done inside twoSum for both si, ei to handle duplicates
+     // below is to skip all duplicates
+            i++;
+            while (i < ei && arr[i] == arr[i - 1])
+                i++;
+        }
+
+        return ans;
+    }
+    
+8)  leetcode 454 - 4 sum 2 - 4 sum count
+ - A[i] + B[j] + C[k] + D[l] == target
+ - 
+    int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int e1 : nums1)
+            for (int e2 : nums2)
+                map.put(e1 + e2, map.getOrDefault(e1 + e2, 0) + 1);
+
+        int count = 0, target = 0;
+        for (int e1 : nums3)
+            for (int e2 : nums4)
+                if (map.containsKey(target - e1 - e2))
+                    count += map.get(target - e1 - e2);
+
+        return count;
+    }
+
+9) Koko eating bananas
+ - Binary search on ans (here k)
+ - How did we know BS can be used? 
+     - "minimise the max" type of problem
+         - find min k (in question) => minimise
+         - have to eat all bananas => keep speed as max as possible
+     - left and right bounded search space
+         - 1 <= piles[i] <= 10^9
+     - constraint
+         - within h hours
+
+ - 
+         int l = 1, r = (int)1e9;
+         while(l <= r) {
+            int k = si + (ei-si)/2
+
+            if(!possibleToEat()) {
+               si = k + 1;
+
+            } else
+               ei = k - 1;
+         }
+ -
+
+    boolean isPossibleToEat(int[] arr, int eatingSpeed, int hour) {
+        int hr = 0;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            hr += Math.ceil(arr[i] / (eatingSpeed * 1.0)); // Note: ceil
+            if (hr > hour)
+                return false;
+        }
+
+        return true;
+    } 
+
+ 10) Maximum Area serving cake 
+ - Binary search on ans (here area of cake)
+ - How did we know BS can be used? 
+     - "minimise the max" type of problem
+         - determine largest area (in question) => maximise
+         - each guest should get a piece => keep the area as min as possible
+     - left and right bounded search space
+         - lower bound - (lower bound of radii[i])^2
+         - upper bound - (upper bound of radii[i])^2
+     - constraint
+         - total number of guests
+ - stopping condition 
+    - while(si <= ei) // wrong cuz area is in floating this 2 values might never be equal...infinite loop
+    - while(ei-si > 1e-5) // question says we want precision in ans till 4 decimal places... so when the diff becomes even smaller than 0.00001 we need to stop
+ - go to higher area --> ei = mid
+   go to lesser area --> si = mid (adding or subtracting 1e-5 doesn't make sense)
+
+11) Capacity to ship packages within D days
+ - si = maxWeight
+   ei = sumOfAllWeights
+ - TODO: revisit after studying DP...see notes I pencil in level up 1 copy
+
+12) Minimise max distance to gas station
+ - while((ei-si) > 1e-6)...cuz mentioned in question: answers within 10^-6 of the actual answer will be accepted
+ - if gas stations are added at every x distance, then b/w stations a->b ...(b-a)/x stations can be added
+    - noOfGasStations += (arr[i] - arr[i-1])/distance;
+
+13) Median of two sorted arrays  ... V V Imp and Hard
+ - Brute Force 1 - iterate over both arrays and merge and store the sorted array....TC: O(m+n), SC: O(m+n)
+ - Brute Force 2 - iterate over both arrays and merge and instead of storing - return N/2 th, or mean of N/2 th and (N/2 + 1) th elements on the fly
+ - Optimal (Binary Search)
+    - ensure BS on smaller size array
+        - if(n1>n2) if(n1>n2) return findMedianSortedArrays(b, a);
+        - Why? 
+           - if n1> n2 and if we apply BS on a[]
+             since aleft oscillates between [0, n1-1] (aleft = (lo +hi)/2 on a[] of size n1)
+             => aleft can take value n1-1 
+             => bleft could be negative (since te/2 will be between [n1/2, n1)) and negative index is absurd
+    - hi != n1-1 but hi = n1 initially cuz all of a[] could be less than all of b[] so segregation point will be after a[]
+                     |
+         . . . alm1  |_  al . . .       a[]
+         . . . . blm1  | bl .           n[]
+                       |
+                  segregation point
+
+         alm1 should be < bl
+         blm1 should be < al
+    -
+  public double findMedianSortedArrays(int[] a, int[] b) {
+        int n1 = a.length, n2 = b.length;
+        if(n1>n2) return findMedianSortedArrays(b, a);
+        
+        int lo = 0, hi = n1, te = n1 + n2;
+        
+        while(lo <= hi)
+        {
+            int aleft = (lo + hi) / 2;
+            // int bleft = (te + 1) / 2 - aleft;
+            int bleft = te/2 - aleft;
+            
+            int alm1 = (aleft == 0) ? Integer.MIN_VALUE : a[aleft-1];
+            int al = (aleft == n1) ? Integer.MAX_VALUE : a[aleft];
+            int blm1 = (bleft == 0) ? Integer.MIN_VALUE : b[bleft-1];
+            int bl = (bleft == n2) ? Integer.MAX_VALUE : b[bleft];
+            
+            if(alm1 <= bl && blm1 <= al)
+            {
+                double median = 0.0;
+                
+                if(te % 2 == 0)
+                {
+                    int lmax = Math.max(alm1, blm1);
+                    int rmin = Math.min(al, bl);
+                    median = (lmax + rmin) / 2.0;
+                }
+                else
+                {
+                    // int lmax = Math.max(alm1, blm1);
+                    int rmin = Math.min(al,bl);
+                    // median = lmax;
+                    median = rmin;
+                }
+                
+                return median;
+            }
+            else if(alm1 > bl)
+                hi = aleft - 1;
+            else if(blm1 > al)
+                lo = aleft + 1;
+        }
+        return 0.0;
+    }
+
+14) length of Longest Increasing Subsequence (LIS)
+ - O(n^2) DP solution
+ - O(nlog n) BS solution
+   - we've to maintain a list to store "LIS so far"
+   - inermediate LIS values will always be increasing but they may not always form a subsequece cuz of replacements; so BS solution doesn't work for printing LIS
+   - we can use BS to find insertPosition() of incoming element cuz LIS so far (i.e. intermediate LIS) is obviously sorted
+   - algo: if insertPosition is outside the "LIS so far" i.e (n-1) + 1 = n => length of LIS will increase
+   
+
+    int computeLIS(int[] nums) {
+        List < Integer > list = new ArrayList < > ();
+
+        for (int num: nums) {
+
+            int pos = insertPosition(tails, num);
+
+            if (pos == list.size()) {
+                list.add(num);
+
+            } else {
+
+                list.set(pos, num); // replace; A smaller value at that position allows more future incoming numbers to be larger, increasing LIS potential...but it might not always be smaller right? yes but no worries cuz it still doesn't change length of "LIS so far"
+
+            }
+
+        }
+        return list.size();
+    }
+
+    int insertPosition(List < Integer > list, int target) {
+        int si = 0, ei = list.size() - 1;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) /2;
+            int val = list.get(mid);
+
+            if (val <= target) {
+                si = mid + 1;
+            } else {
+                ei = mid - 1;
+            }
+        }
+
+        int insertPos = si;
+
+        // below code prevents duplicates in ans
+            int lastIndex = insertPos - 1;
+            if (lastIndex >= 0 && list.get(lastIndex) == target) {
+                return lastIndex;
+            }
+        
+
+        return insertPos;
+    }
+   
+
+| Method                          | Time            | Gives Length?                 | Gives LIS Sequence? |
+| --------------------------------| --------------- | ------------------------------| ------------------- |
+| DP (n²)                         | O(n²)           | ✔                             | ✔                  |
+| Binary Search (basic)           | O(n log n)      | ✔                             | ❌                 |
+| Binary Search + tracking arrays | O(n log n)      | ✔                             | ✔                  |
+
+ 
+15) Find k closest elements to X in sorted array (X might not be in array)
+ - PQ solution O(nlogk) - <ele, |X-ele|> in k size maxheap (sorted property not utilised)
+ - BS solution O(log n + k) (same TC whether we want duplicate in ans or not)
+
+    List < Integer > findClosestElements(int[] arr, int k, int x) {
+        int n = arr.length;
+
+        // Binary search to locate the best starting point for the k-window
+        int left = 0, right = n - k - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (x - arr[mid] > arr[mid + k] - x)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+
+
+        List < Integer > ans = new ArrayList < > ();
+        for (int i = left; i < left + k; i++)
+            ans.add(arr[i]);
+
+        // ===== remove duplicates =====
+        // Not using HashSet to save O(k) space
+
+        // List<Integer> filtered = new ArrayList<>();
+        // int prev = Integer.MIN_VALUE;
+        // for (int num : ans) { 
+        //     if (num != prev)
+        //         filtered.add(num);
+        //     prev = num;
+        // }
+        // return filtered;
+
+
+        return ans; // include duplicates
+    }
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Level Up 2
+------------
 
 
 
